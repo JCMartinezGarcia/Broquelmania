@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
-use App\Models\Suppliers;
 
-class SuppliersController extends Controller
+class ClientsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $suppliers = Suppliers::getAllSuppliersInfo();
-        return response()->json($suppliers);
+        $clients = Client::getAllClients();
+        return response()->json($clients);
     }
 
     /**
@@ -21,8 +21,8 @@ class SuppliersController extends Controller
      */
     public function store(Request $request)
     {
-        $supplier = Suppliers::registerNewSupplier($request);
-        return response()->json($supplier);
+        $client = Client::registerNewClient($request);
+        return response()->json($client);
     }
 
     /**
@@ -30,8 +30,8 @@ class SuppliersController extends Controller
      */
     public function show(string $id)
     {
-        $supplier = Suppliers::getSupplierInfo($id);
-        return response()->json($supplier);
+        $client = Client::getClientById($id);
+        return response()->json($client);
     }
 
     /**
@@ -39,8 +39,8 @@ class SuppliersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $supplier = Suppliers::updateSupplierInfo($request, $id);
-        return response()->json($supplier);
+        $client = Client::updateClientInfo($request, $id);
+        return response()->json($client);
     }
 
     /**
@@ -48,7 +48,7 @@ class SuppliersController extends Controller
      */
     public function destroy(string $id)
     {
-        $supplier = Suppliers::softDeleteSupplier($id);
-        return response()->json($supplier);
+        $client  = Client::softDeleteClient($id);
+        return response()->json($client);
     }
 }
