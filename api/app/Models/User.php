@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -42,4 +43,40 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * 
+     */
+
+    public static function getAll(){
+        return self::all();
+    }
+
+    /**
+     * 
+     */
+    public static function getById($id){
+        return self::find($id);
+    }
+
+    /**
+     * 
+     */
+
+     public static function updateUser($request, $id){
+        $user = self::find($id);
+        $user->name = $request->name;
+        $user->save();
+        return $user;
+     }
+
+     /**
+      * 
+      */
+
+      public static function deleteUser($id){
+        $user = self::find($id);
+        $user->delete();
+        return $user;
+      }
 }

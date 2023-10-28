@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Suppliers;
+use App\Models\User;
 
-class SuppliersController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $suppliers = Suppliers::getAllSuppliersInfo();
-        return response()->json($suppliers);
+        $users = User::getAll();
+        return response()->json($users);
     }
 
     /**
@@ -21,8 +21,7 @@ class SuppliersController extends Controller
      */
     public function store(Request $request)
     {
-        $supplier = Suppliers::registerNewSupplier($request);
-        return response()->json($supplier);
+        
     }
 
     /**
@@ -30,8 +29,8 @@ class SuppliersController extends Controller
      */
     public function show(string $id)
     {
-        $supplier = Suppliers::getSupplierInfo($id);
-        return response()->json($supplier);
+        $user = User::getById($id);
+        return response()->json($user);
     }
 
     /**
@@ -39,8 +38,8 @@ class SuppliersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $supplier = Suppliers::updateSupplierInfo($request, $id);
-        return response()->json($supplier);
+        $user = User::updateUser($request, $id);
+        return response()->json($user);
     }
 
     /**
@@ -48,7 +47,7 @@ class SuppliersController extends Controller
      */
     public function destroy(string $id)
     {
-        $supplier = Suppliers::softDeleteSupplier($id);
-        return response()->json($supplier);
+        $user = User::deleteUser($id);
+        return response()->json($user);
     }
 }
