@@ -6,7 +6,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\SuppliersController;
-use App\Models\Suppliers;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ProductsClasificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::apiResources([
     'users' => UserController::class,
     'clients' => ClientsController::class,
     'suppliers' => SuppliersController::class,
+    'products' => ProductsController::class,
+    'products-classification' => ProductsClasificationController::class,
 ]);
 
 Route::post('/user', [RegisteredUserController::class, 'store']);
