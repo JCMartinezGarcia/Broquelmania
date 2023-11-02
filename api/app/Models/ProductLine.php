@@ -8,4 +8,50 @@ use Illuminate\Database\Eloquent\Model;
 class ProductLine extends Model
 {
     use HasFactory;
+
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'linea_producto',
+    ];
+
+    /**
+     * 
+     */
+    public static function getAllProductsLinesInfo()
+    {
+        return self::all();
+    }
+
+    /**
+     * 
+     */
+    public static function registerNewProductLine($request)
+    {
+        return self::create(['linea_producto' => $request->linea_producto]);
+    }
+
+    /**
+     * 
+     */
+    public static function updateProductLineInfo($request, $id)
+    {
+        $line = self::find($id);
+        $line->linea_producto = $request->linea_producto;
+        $line->save();
+        return $line;
+    }
+
+    /**
+     * 
+     */
+    public static function deleteProductsLine($id){
+        $line = self::find($id);
+        $line->delete();
+        return $line;
+    }
 }

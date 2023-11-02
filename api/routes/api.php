@@ -8,6 +8,7 @@ use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductsClasificationController;
+use App\Http\Controllers\ProductsLinesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,7 @@ Route::apiResources([
     'suppliers' => SuppliersController::class,
     'products' => ProductsController::class,
     'products-classification' => ProductsClasificationController::class,
+    'products-lines' => ProductsLinesController::class,
 ]);
 
 Route::post('/user', [RegisteredUserController::class, 'store']);
