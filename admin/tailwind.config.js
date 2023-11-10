@@ -8,6 +8,10 @@ export default {
   ],
   theme: {
     extend: {},
+    container: {
+      center: true,
+      padding: '2rem',
+    },
   },
   darkMode: "class",
   plugins: [nextui()]
