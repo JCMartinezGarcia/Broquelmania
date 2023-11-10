@@ -4,6 +4,8 @@ import SideBar from "../../components/sidebar/SideBar.tsx";
 import BreadCum from "../../components/breadcum/BreadCum.tsx";
 import HomeCard from "../../components/homecard/HomeCard.tsx";
 import SalesOverview from "../../components/sales_overview/SalesOverview.tsx";
+import TopSoldOverview from "../../components/top_products/TopSoldOverview.tsx";
+
 const Home = () => {
 
     const breadcumHierarchy: string[] = ['Home', 'Dashboard'];
@@ -23,8 +25,13 @@ const Home = () => {
                         <HomeCard />
                         <HomeCard />
                     </div>
-                    <div className="my-2">
-                        <SalesOverview />
+                    <div className="my-2 flex flex-row gap-4">
+                        <div className="basis-4/5">
+                            <SalesOverview />
+                        </div>
+                        <div className="basis-1/5">
+                            <TopSoldOverview />
+                        </div>
                     </div>
                 </div>
             </div>
