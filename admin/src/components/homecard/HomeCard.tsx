@@ -11,7 +11,6 @@ const HomeCard = () => {
     return (
         <>
             <Card className="max-w-[400px]">
-
                 <Divider />
                 <CardBody>
                     <div className="flex flex-row">

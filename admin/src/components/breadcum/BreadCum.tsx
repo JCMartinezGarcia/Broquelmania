@@ -2,7 +2,9 @@ import {
     Navbar,
     NavbarContent,
     NavbarItem,
-    Link
+    Link,
+    Card,
+    CardBody
 } from "@nextui-org/react";
 
 interface BreadCumProps {
@@ -13,19 +15,23 @@ const BreadCum: React.FC<BreadCumProps> = ({ herarchy }) => {
 
     return (
         <>
-            <Navbar>
-                <NavbarContent>
-                    <NavbarItem>
-                        <Link color="foreground" href="#">
-                            Home
-                        </Link>
-                    </NavbarItem>
-                    <span>{'>>'}</span>
-                    <NavbarItem>
-                        Dashboard
-                    </NavbarItem>
-                </NavbarContent>
-            </Navbar>
+            <Card>
+                <CardBody>
+                    <Navbar>
+                        <NavbarContent>
+                            <NavbarItem>
+                                <Link color="foreground" href="#">
+                                    Home
+                                </Link>
+                            </NavbarItem>
+                            <span>{'>>'}</span>
+                            <NavbarItem>
+                                Dashboard
+                            </NavbarItem>
+                        </NavbarContent>
+                    </Navbar>
+                </CardBody>
+            </Card>
         </>
     )
 }
