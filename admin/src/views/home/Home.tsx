@@ -12,10 +12,10 @@ const Home = () => {
         <div>
             <Nav />
             <div className="flex flex-row">
-                <div className="basis-1/4">
+                <div className="basis-1/5">
                     <SideBar isHomeView={isHome} />
                 </div>
-                <div className="basis-3/4 px-8">
+                <div className="basis-4/5 px-8">
                     <BreadCum herarchy={breadcumHierarchy} />
                     <div className="grid grid-cols-4 gap-4">
                         <HomeCard />
