@@ -12,13 +12,16 @@
   "dependencies": {
     "@nextui-org/breadcrumbs": "^2.0.3",
     "@nextui-org/react": "^2.1.13",
+    "chart.js": "^4.4.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
