@@ -50,13 +50,13 @@ export const data = {
 };
 const SalesOverview = () => {
     return (
-        <>
+        <div>
             <Card>
                 <CardBody>
                     <Chart type='bar' data={data} />
                 </CardBody>
             </Card>
-        </>
+        </div>
     )
 }
 

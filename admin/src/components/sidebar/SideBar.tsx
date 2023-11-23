@@ -1,11 +1,7 @@
 import {
     Navbar,
-    NavbarBrand,
     NavbarContent,
     NavbarItem,
-    NavbarMenuToggle,
-    NavbarMenu,
-    NavbarMenuItem,
     Link,
     Accordion,
     AccordionItem,
@@ -18,7 +14,7 @@ interface SideProps {
 const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
     return (
         <>
-            <Navbar>
+            <Navbar className="xsm:max-md:hidden">
                 <NavbarContent className="block">
                     <Accordion
                         selectionMode="multiple"

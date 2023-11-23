@@ -1,0 +1,16 @@
+.breadcumContainer {
+    z-index: 20;
+}
+.breadCardBody{
+    padding: 0rem !important;
+}
+
+@media only screen and (min-width: 1030px) {
+
+    .breadcumContainer {
+        z-index: 40;
+    }
+    .breadCardBody{
+        padding: 0rem !important;
+    }
+}

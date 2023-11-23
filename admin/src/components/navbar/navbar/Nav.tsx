@@ -1,7 +1,11 @@
+import React from "react";
 import {
     Navbar,
+    NavbarMenuToggle,
     NavbarBrand,
     NavbarContent,
+    NavbarMenu,
+    NavbarMenuItem,
     NavbarItem,
     Link,
     Button,
@@ -9,15 +13,41 @@ import {
     DropdownTrigger,
     Dropdown,
     DropdownMenu,
-    Avatar
+    Avatar,
+    Accordion,
+    AccordionItem
 } from "@nextui-org/react";
+import { FaHome } from 'react-icons/fa';
+import styles from "./Nav.module.css";
 const Nav = () => {
+
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    /*
+    const menuItems = [ 
+        "Profile",
+        "Dashboard",
+        "Activity",
+        "Analytics",
+        "System",
+        "Deployments",
+        "My Settings",
+        "Team Settings",
+        "Help & Feedback",
+        "Log Out",
+    ];
+*/
     return (
         <div>
             <Navbar isBordered>
-                <NavbarBrand>
-                    <p className="font-bold text-inherit">ACME</p>
-                </NavbarBrand>
+                <NavbarContent>
+                    <NavbarMenuToggle
+                        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                        className={styles.navbarMenu}
+                    />
+                    <NavbarBrand>
+                        <p className="font-bold text-inherit">ACME</p>
+                    </NavbarBrand>
+                </NavbarContent>
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
                         <Link color="foreground" href="#">
@@ -75,6 +105,73 @@ const Nav = () => {
                         </DropdownMenu>
                     </Dropdown>
                 </NavbarContent>
+                <NavbarMenu>
+                        <NavbarContent className="block">
+                            <Accordion
+                                selectionMode="multiple"
+                               /* defaultExpandedKeys={}*/
+                            >
+                                <AccordionItem
+                                    key="1"
+                                    aria-label="Chung Miller"
+                                    startContent={
+                                        <FaHome />
+                                    }
+                                    /*subtitle="4 unread messages"*/
+                                    title="Home"
+                                    data-open
+                                >
+                                    <NavbarItem
+                                        className="p-2"
+                                        isActive={false}>
+                                        <Link className="w-full" color="foreground" href="#">
+                                            <FaHome />
+                                            <span className="ml-4">
+                                                Dasboard
+                                            </span>
+                                        </Link>
+                                    </NavbarItem> <NavbarItem className="p-2">
+                                        <Link className="w-full" color="foreground" href="#">
+                                            <FaHome />
+                                            <span className="ml-4">
+                                                Emails
+                                            </span>
+                                        </Link>
+                                    </NavbarItem>
+                                    <NavbarItem className="p-2">
+                                        <Link className="w-full" color="foreground" href="#">
+                                            <FaHome />
+                                            <span className="ml-4">
+                                                More..
+                                            </span>
+                                        </Link>
+                                    </NavbarItem>
+                                </AccordionItem>
+                            </Accordion >
+
+                            <NavbarItem className="p-2">
+                                <Link color="foreground" href="#">
+                                    Features
+                                </Link>
+                            </NavbarItem>
+                        </NavbarContent>
+                    {
+                    /*menuItems.map((item, index) => (
+                        <NavbarMenuItem key={`${item}-${index}`}>
+                            <Link
+                                color={
+                                    index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
+                                }
+                                className="w-full"
+                                href="#"
+                                size="lg"
+                            >
+                                {item}
+                            </Link>
+                        </NavbarMenuItem>
+                    ))
+                            */}
+                </NavbarMenu>
             </Navbar>
         </div>
     )

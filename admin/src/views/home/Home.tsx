@@ -3,9 +3,10 @@ import Nav from "../../components/navbar/navbar/Nav.tsx";
 import SideBar from "../../components/sidebar/SideBar.tsx";
 import BreadCum from "../../components/breadcum/BreadCum.tsx";
 import HomeCard from "../../components/homecard/HomeCard.tsx";
-import SalesOverview from "../../components/sales_overview/SalesOverview.tsx";
-import TopSoldOverview from "../../components/top_products/TopSoldOverview.tsx";
-
+import SalesOverview from "../../components/home/sales_overview/SalesOverview.tsx";
+import TopSoldOverview from "../../components/home/top_products/TopSoldOverview.tsx";
+import DebtsOverview from "../../components/home/debtsoverview/DebtsOverview.tsx";
+import styles from "./Home.module.css"
 const Home = () => {
 
     const breadcumHierarchy: string[] = ['Home', 'Dashboard'];
@@ -14,24 +15,24 @@ const Home = () => {
         <div>
             <Nav />
             <div className="flex flex-row">
-                <div className="basis-1/5">
+                <div className={styles.sideMenuContainer}>
                     <SideBar isHomeView={isHome} />
                 </div>
-                <div className="basis-4/5 px-8">
+                <div className={styles.dashboardContainer}>
                     <BreadCum herarchy={breadcumHierarchy} />
-                    <div className="my-2 grid grid-cols-4 gap-4">
+                    <div className={styles.cardsOverviewsContainer}>
                         <HomeCard />
                         <HomeCard />
                         <HomeCard />
                         <HomeCard />
                     </div>
-                    <div className="my-2 flex flex-row gap-4">
-                        <div className="basis-4/5">
-                            <SalesOverview />
-                        </div>
-                        <div className="basis-1/5">
-                            <TopSoldOverview />
-                        </div>
+                    <div className={styles.chartsContainer}>
+                        <SalesOverview />
+                        <TopSoldOverview />
+                    </div>
+                    <div className={styles.tablesContaier}>
+                        <DebtsOverview />
+                        <DebtsOverview />
                     </div>
                 </div>
             </div>
