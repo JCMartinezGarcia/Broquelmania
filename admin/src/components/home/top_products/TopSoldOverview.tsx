@@ -6,6 +6,7 @@ import {
     Legend
 } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import styles from "./TopSoldOverview.module.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -38,13 +39,13 @@ export const data = {
 
 const TopSoldOverview = () => {
     return (
-        <>
-            <Card>
+        <div className={styles.topSoldContainer}>
+            <Card className={styles.topSoldCard}>
                 <CardBody>
-                    <Pie data={data} />;
+                    <Pie data={data} />
                 </CardBody>
             </Card>
-        </>
+        </div>
     )
 }
 

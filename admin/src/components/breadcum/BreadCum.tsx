@@ -6,7 +6,7 @@ import {
     Card,
     CardBody
 } from "@nextui-org/react";
-
+import styles from "./BreadCum.module.css"
 interface BreadCumProps {
     herarchy: string[];
 }
@@ -15,8 +15,8 @@ const BreadCum: React.FC<BreadCumProps> = ({ herarchy }) => {
 
     return (
         <>
-            <Card>
-                <CardBody>
+            <Card className={styles.breadcumContainer}>
+                <CardBody className={styles.breadCardBody}>
                     <Navbar>
                         <NavbarContent>
                             <NavbarItem>
