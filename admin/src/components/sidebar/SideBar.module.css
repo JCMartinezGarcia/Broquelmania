@@ -1,0 +1,20 @@
+.sideContainer {
+    width: 20%;
+}
+
+.sectionTitle {
+    text-transform: uppercase;
+    color: #6c768e;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+.sectionItems {
+    width: 100%;
+    padding: .5rem;
+    border-radius: 8px;
+}
+
+.sectionItems:hover {
+    background-color: #ffd70045;
+}
