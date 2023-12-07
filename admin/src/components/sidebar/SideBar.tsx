@@ -6,14 +6,15 @@ import {
     Accordion,
     AccordionItem,
 } from "@nextui-org/react";
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaUser } from 'react-icons/fa';
+import styles from "./SideBar.module.css";
 
 interface SideProps {
     isHomeView: boolean;
 }
 const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
     return (
-        <>
+        <div className={styles.sideContainer}>
             <Navbar className="xsm:max-md:hidden">
                 <NavbarContent className="block">
                     <Accordion
@@ -57,15 +58,20 @@ const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
                             </NavbarItem>
                         </AccordionItem>
                     </Accordion >
-
-                    <NavbarItem className="p-2">
-                        <Link color="foreground" href="#">
-                            Features
+                    <NavbarItem className={styles.sectionTitle}>
+                        <p>system</p>
+                    </NavbarItem>
+                    <NavbarItem className={styles.sectionItems}>
+                        <Link color="foreground" href="/clients">
+                            <FaUser />
+                            <span className="ml-4">
+                                clientes
+                            </span>
                         </Link>
                     </NavbarItem>
                 </NavbarContent>
             </Navbar>
-        </>
+        </div>
 
     );
 }

@@ -1,0 +1,22 @@
+.title {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.filtsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.searchInput {
+    width: auto;
+}
+
+.addButton {
+    align-self: flex-end;
+}
+
+.clientstableContainer {
+    margin-top: 1rem;
+}
