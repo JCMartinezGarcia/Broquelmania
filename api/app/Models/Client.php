@@ -59,7 +59,7 @@ class Client extends Model
             'email' => $request->email,
             'dirección' => $request->dirección,
             'telefono_movil' => $request->telefono_movil,
-            'tipo_cliente' => $request->tipo_cliente,
+            'tipo_cliente' => ($request->tipo_cliente) ? "Mayorista" : "Público",
         ]);
     }
     /**
@@ -74,7 +74,7 @@ class Client extends Model
         (!self::validateMatchingEmails($client->email, $request->email)) ? $client->email = $request->email : null;
         $client->dirección = $request->dirección;
         $client->telefono_movil = $request->telefono_movil;
-        $client->tipo_cliente = $request->tipo_cliente;
+        $client->tipo_cliente = ($request->tipo_cliente) ? 'Mayorista' : 'Público';
 
         $client->save();
         return $client;
@@ -92,10 +92,10 @@ class Client extends Model
      * 
      */
 
-    public static function softDeleteClient($id){
+    public static function softDeleteClient($id)
+    {
         $client = self::find($id);
         $client->delete();
         return $client;
     }
 }
-

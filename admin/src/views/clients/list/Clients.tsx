@@ -3,6 +3,7 @@ import Nav from "../../../components/navbar/navbar/Nav";
 import SideBar from "../../../components/sidebar/SideBar";
 import ClientsListTable from "../../../components/clients/ClientsListTable";
 import ClientsCreateForm from "../../../components/clients/create/ClientsCreateForm";
+import ClientsUpdateForm from "../../../components/clients/update/ClientsUpdateForm";
 import styles from "./Clients.module.css";
 
 // interface define the types of props 
@@ -26,7 +27,7 @@ const Clients: React.FC<clientProps> = ({ view }) => {
             displayComponent = <ClientsCreateForm />;
             break;
         case "update":
-            displayComponent = <ClientsListTable />;
+            displayComponent = <ClientsUpdateForm />;
             break;
         case "details":
             displayComponent = <ClientsListTable />;
