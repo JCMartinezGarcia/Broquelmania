@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import {
     Input,
     Button,
     Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
+    Pagination,
     User,
     // Chip,
     Tooltip,
@@ -54,10 +55,19 @@ const ClientsListTable = () => {
     const [modalSize, setModalSize] = useState<"lg" | "md" | "xs" | "sm" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full" | undefined>("lg");
     const [modalCase, setModalCase] = useState('');
     const [modalTitle, setModalTitle] = useState('');
+    const [page, setPage] = React.useState(1);
+    const rowsPerPage = 2;
+    const pages = Math.ceil(clients.length / rowsPerPage);
+    const items = React.useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        return clients.slice(start, end);
+    }, [page, clients]);
 
     // Hooks
     const navigate = useNavigate();
-    //funtions axios
+    //AXIOS FUNCTIONS
     /**
      * get all clients data
      */
@@ -72,6 +82,17 @@ const ClientsListTable = () => {
     async function getClientById(id: number) {
         try {
             const { data, status } = await axios.get(`clients/${id}`);
+            if (status === 200) {
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function searchClients(searchString: string) {
+        try {
+            const { data, status } = await axios.get(`/clients/search/${searchString}`);
             if (status === 200) {
                 return data;
             }
@@ -135,6 +156,21 @@ const ClientsListTable = () => {
         setModalCase('delete');
         onOpen();
     }
+    /**
+     * 
+     */
+    async function handleSearchClient(e: ChangeEvent<HTMLInputElement>) {
+        const { value } = e.target;
+        if (value != '') {
+            const foundClients = await searchClients(value);
+            (foundClients.length === 0)
+                ? alert('No se encontraron resultados')
+                : setClients(foundClients);
+        } else {
+            getClients();
+        }
+    }
+
     const renderCell = React.useCallback((client: Clients, columnKey: keyof Clients) => {
         const cellValue = client[columnKey];
 
@@ -262,6 +298,7 @@ const ClientsListTable = () => {
                         startContent={
                             <FaSearch />
                         }
+                        onChange={handleSearchClient}
                     />
                 </div>
                 <Button className={styles.addButton} size="md" color="secondary" onClick={handleCreateClient}>Agregar</Button>
@@ -271,7 +308,35 @@ const ClientsListTable = () => {
                     {/** searchbar filters and actions */}
                     { /**table clients */}
                     <div >
-                        <Table aria-label="Example table with custom cells">
+                        <Table aria-label="Example table with custom cells"
+                            bottomContent={
+                                <div className="flex flex-col gap-5">
+                                    <Pagination
+                                        total={pages}
+                                        color="secondary"
+                                        page={page}
+                                        onChange={setPage}
+                                    />
+                                    <div className="flex gap-2">
+                                        <Button
+                                            size="sm"
+                                            variant="flat"
+                                            color="secondary"
+                                            onPress={() => setPage((prev) => (prev > 1 ? prev - 1 : prev))}
+                                        >
+                                            Previous
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="flat"
+                                            color="secondary"
+                                            onPress={() => setPage((prev) => (prev < pages ? prev + 1 : prev))}
+                                        >
+                                            Next
+                                        </Button>
+                                    </div>
+                                </div>
+                            }>
                             <TableHeader columns={columns}>
                                 {(column) => (
                                     <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -279,7 +344,7 @@ const ClientsListTable = () => {
                                     </TableColumn>
                                 )}
                             </TableHeader>
-                            <TableBody items={clients}>
+                            <TableBody items={items}>
                                 {(item) => (
                                     <TableRow key={item.id}>
                                         {(columnKey) => <TableCell>{renderCell(item, columnKey as keyof Clients)}</TableCell>}

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use function Laravel\Prompts\search;
+
 class Client extends Model
 {
     use HasFactory, SoftDeletes;
@@ -15,7 +17,7 @@ class Client extends Model
      * @var array
      */
     protected $attributes = [
-        'tipo_cliente' => 'regular',
+        'tipo_cliente' => 'Público',
     ];
 
     /**
@@ -32,7 +34,7 @@ class Client extends Model
         'tipo_cliente'
     ];
     /**
-     * 
+     * validate that email are the same
      * 
      */
     private static function validateMatchingEmails($firstEmail, $secondEmail)
@@ -41,15 +43,16 @@ class Client extends Model
     }
 
     /**
-     * 
+     * get all client registers
      */
 
     public static function getAllClients()
     {
-        return self::all();
+        return self::orderBy('id', 'desc')
+            ->get();
     }
     /**
-     * 
+     * register a new client on database
      */
     public static function registerNewClient($request)
     {
@@ -63,7 +66,7 @@ class Client extends Model
         ]);
     }
     /**
-     * 
+     * updates a client register
      */
     public static function updateClientInfo($request, $id)
     {
@@ -81,7 +84,7 @@ class Client extends Model
     }
 
     /**
-     * 
+     * retrieves a clients by id
      * 
      */
     public static function getClientById($id)
@@ -89,7 +92,7 @@ class Client extends Model
         return self::find($id);
     }
     /**
-     * 
+     * softs delete a client from database
      */
 
     public static function softDeleteClient($id)
@@ -97,5 +100,18 @@ class Client extends Model
         $client = self::find($id);
         $client->delete();
         return $client;
+    }
+    /**
+     * retrieves all clients tha matches the search string parameter
+     */
+    public static function searchClients($search)
+    {
+        $starts = $search . '%';
+        $contains = '%' . $search . '%';
+        $clients = self::where('nombres', 'like', $contains)
+            ->orWhere('apellidos', 'like', $contains)
+            ->orderBy('id', 'desc')
+            ->get();
+        return $clients;
     }
 }
