@@ -51,4 +51,10 @@ class ClientsController extends Controller
         $client  = Client::softDeleteClient($id);
         return response()->json($client);
     }
+
+    public function search(string $searchParam)
+    {
+        $clients = Client::searchClients($searchParam);
+        return response()->json($clients);
+    }
 }
