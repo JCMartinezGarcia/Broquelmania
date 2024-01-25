@@ -22,7 +22,8 @@
     "react-icons": "^4.11.0",
     "react-redux": "^9.0.1",
     "react-router-dom": "^6.18.0",
-    "redux": "^5.0.0"
+    "redux": "^5.0.0",
+    "sweetalert": "^2.1.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",

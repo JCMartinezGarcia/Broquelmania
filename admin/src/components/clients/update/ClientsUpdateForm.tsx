@@ -3,11 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
     Card, CardBody,
     Input, Textarea, Checkbox,
-    Button
 } from "@nextui-org/react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import swal from "sweetalert";
 import axios from "axios";
+import BreadCum from "../../breadcum/BreadCum";
 import styles from "./ClientsUpdate.module.css";
+//import Clients from "../../../views/clients/list/Clients";
 
 // defines the datatypes of the form inputs
 interface FData {
@@ -20,14 +22,16 @@ interface FData {
 }
 
 const ClientsUpdateForm = () => {
+    //react-hook-forms
+    const { register, handleSubmit, formState: { errors }, control, reset, getValues, setValue } = useForm<FData>();
+    //states
+    const [isSelected, setIsSelected] = useState(false);
     //hooks
     useEffect(() => {
         if (id) {
             getClientById(Number(id));
         }
     }, []);
-    //react-hook-forms
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FData>();
     //hook navigate
     const navigate = useNavigate();
     // client id
@@ -37,6 +41,7 @@ const ClientsUpdateForm = () => {
         try {
             const { data, status } = await axios.get(`/clients/${id}`);
             if (status === 200) {
+                (data.tipo_cliente === "Mayorista") ? setIsSelected(true) : setIsSelected(false);
                 reset(data);
             }
         } catch (error) {
@@ -51,9 +56,16 @@ const ClientsUpdateForm = () => {
      */
     async function updateClient(dataClient: FData) {
         try {
-            const { data, status } = await axios.put(`/clients/${id}`, dataClient);
+            const { status } = await axios.put(`/clients/${id}`, dataClient);
             if (status === 200) {
-                navigate('/clients');
+                swal({
+                    title: "¡Cliente actualizado!",
+                    text: "El cliente se actualizó con éxito.",
+                    icon: "success"
+                }).then((prom) => {
+                    (prom) ? navigate('/clients') : navigate('/clients');
+                });
+
             }
 
         } catch (error) {
@@ -67,9 +79,19 @@ const ClientsUpdateForm = () => {
     const onSubmit = handleSubmit((data) => {
         updateClient(data);
     });
+    /**
+     * changes the state for the type of client checkbox
+     * and also the type value of client
+     */
+    function handleClientType() {
+        (isSelected) ? setIsSelected(false) : setIsSelected(true);
+        (getValues("tipo_cliente") === "Mayorista") ? setValue("tipo_cliente", "Público") : setValue("tipo_cliente", "Mayorista");
+    }
 
     return (
         <div>
+            {/**Breadcum component */}
+            <BreadCum />
             <h1 className={styles.title}><strong>Actualizar Cliente</strong></h1>
             <Card className={styles.formCard}>
                 <CardBody>
@@ -141,14 +163,22 @@ const ClientsUpdateForm = () => {
                         <Controller
                             name="tipo_cliente"
                             control={control}
-                            render={({ field }) => <Checkbox {...field} >Mayorista</Checkbox>}
+                            render={({ field }) => <Checkbox
+                                {...field}
+                                isSelected={isSelected}
+                                onChange={handleClientType}
+                            >
+                                Mayorista
+                            </Checkbox>}
                         />
-                        <input
+
+                        <Input
+                            className="mt-4"
                             type="submit"
-                            className={styles.updateButton}
                             color="secondary"
-                            value="Registrar"
+                            value="Actualizar"
                         />
+
                     </form>
                 </CardBody>
             </Card>

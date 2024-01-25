@@ -77,7 +77,7 @@ class Client extends Model
         (!self::validateMatchingEmails($client->email, $request->email)) ? $client->email = $request->email : null;
         $client->dirección = $request->dirección;
         $client->telefono_movil = $request->telefono_movil;
-        $client->tipo_cliente = ($request->tipo_cliente) ? 'Mayorista' : 'Público';
+        $client->tipo_cliente = ($request->tipo_cliente === "Mayorista") ? 'Mayorista' : 'Público';
 
         $client->save();
         return $client;
