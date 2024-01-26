@@ -6,21 +6,38 @@ import {
     Card,
     CardBody
 } from "@nextui-org/react";
-import styles from "./BreadCum.module.css"
-interface BreadCumProps {
-    herarchy: string[];
-}
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import styles from "./BreadCum.module.css";
 
-const BreadCum: React.FC<BreadCumProps> = ({ herarchy }) => {
+const BreadCum = () => {
+    //states
+    const [path, setPath] = useState<string[]>();
+    //hooks
+    const location = useLocation();
+    useEffect(() => {
+        setPath(location.pathname.split("/"));
+    }, []);
+    // functions
+    const navItems = path?.map((elem) => {
+        if (elem) {
+            if (isNaN(Number(elem))) {
+                return <li>
+                    {elem}
+                </li>
+            }
 
+        }
+    });
     return (
         <>
             <Card className={styles.breadcumContainer}>
                 <CardBody className={styles.breadCardBody}>
-                    <Navbar>
-                        <NavbarContent>
-                            <NavbarItem>
-                                <Link color="foreground" href="#">
+                    <nav>
+                        <ul>
+                            {/** 
+                                <NavbarItem>
+                                <Link color="foreground" href="/">
                                     Home
                                 </Link>
                             </NavbarItem>
@@ -28,8 +45,12 @@ const BreadCum: React.FC<BreadCumProps> = ({ herarchy }) => {
                             <NavbarItem>
                                 Dashboard
                             </NavbarItem>
-                        </NavbarContent>
-                    </Navbar>
+                            **/
+                                navItems
+                            }
+
+                        </ul>
+                    </nav>
                 </CardBody>
             </Card>
         </>

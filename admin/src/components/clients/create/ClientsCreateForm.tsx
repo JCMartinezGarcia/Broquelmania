@@ -1,7 +1,9 @@
 import { Card, CardBody, Input, Textarea, Checkbox, Button } from "@nextui-org/react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 import axios from "axios";
+import BreadCum from "../../breadcum/BreadCum";
 import styles from "./ClientsCreateForm.module.css";
 
 // defines the datatypes of the form inputs
@@ -34,8 +36,16 @@ const ClientsCreateForm = () => {
             const res = await axios.post('/clients', data);
             //validate if reponse is successfull
             if (res.status === 200) {
-            //redirects to clients list table
-                navigate('/clients');
+                //show success message
+                swal({
+                    title: "¡Cliente registrado!",
+                    text: "Se registró el cliente con éxito.",
+                    icon: "success"
+                }).then((action) => {
+                    //redirects to clients list table
+                    (action) ? navigate('/clients') : navigate('/clients');
+                });
+
             }
         } catch (error) {
             console.log(error);
@@ -44,6 +54,8 @@ const ClientsCreateForm = () => {
 
     return (
         <div>
+            {/**Breadcum component */}
+            <BreadCum />
             <h1 className={styles.title}><strong>Registrar Clientes</strong></h1>
             <Card className={styles.formCard}>
                 <CardBody>
@@ -118,9 +130,9 @@ const ClientsCreateForm = () => {
                             render={({ field }) => <Checkbox {...field}>Mayorista</Checkbox>}
                         />
 
-                        <input
+                        <Input
+                            className="mt-4"
                             type="submit"
-                            className={styles.registerButton}
                             color="secondary"
                             value="Registrar"
                         />

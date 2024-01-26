@@ -10,10 +10,10 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/clients" element={<Clients view={clientsViews[0]} />} />
-          <Route exact path="/clients/register" element={<Clients view={clientsViews[1]} />} />
-          <Route exact path="/clients/edit/:id" element={<Clients view={clientsViews[2]} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/clients" element={<Clients view={clientsViews[0]} />} />
+          <Route path="/clients/register" element={<Clients view={clientsViews[1]} />} />
+          <Route path="/clients/edit/:id" element={<Clients view={clientsViews[2]} />} />
         </Routes>
       </Router>
     </>

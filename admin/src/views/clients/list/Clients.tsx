@@ -1,4 +1,3 @@
-import BreadCum from "../../../components/breadcum/BreadCum";
 import Nav from "../../../components/navbar/navbar/Nav";
 import SideBar from "../../../components/sidebar/SideBar";
 import ClientsListTable from "../../../components/clients/ClientsListTable";
@@ -15,8 +14,7 @@ interface clientProps {
 const Clients: React.FC<clientProps> = ({ view }) => {
     //component to be displayed 
     let displayComponent;
-    //this defines the heriarchy of current view
-    const breadcumHierarchy: string[] = ['Home', 'Dashboard'];
+
     const isHome: boolean = false;
     //some logic
     switch (view) {
@@ -45,8 +43,7 @@ const Clients: React.FC<clientProps> = ({ view }) => {
                 <SideBar isHomeView={isHome} />
                 {/**clients section */}
                 <div className={styles.clientsContainer}>
-                    {/**breadcum */}
-                    <BreadCum herarchy={breadcumHierarchy} />
+                
                     {
                         displayComponent
                     }

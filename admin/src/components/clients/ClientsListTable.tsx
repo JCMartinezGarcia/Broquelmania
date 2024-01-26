@@ -13,7 +13,9 @@ import {
 } from "@nextui-org/react";
 import { FaSearch, FaUserEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 import axios from "axios";
+import BreadCum from "../breadcum/BreadCum";
 import styles from "./ClientsListTable.module.css";
 
 
@@ -108,12 +110,20 @@ const ClientsListTable = () => {
     /**
      * sends client id to server to be deleted
      */
-    async function deleteClient() {
+    async function deleteClient(id: number) {
         try {
-            const { data, status } = await axios.delete(`/clients/${client?.id}`);
+            const { status } = await axios.delete(`/clients/${id}`);
             if (status === 200) {
-                getClients();
-                onClose();
+                swal({
+                    title: "¡Registro eliminado!",
+                    text: "El registro ha sido eliminado con éxito.",
+                    icon: "success"
+                }).then(() => {
+                    getClients();
+
+                });
+
+
             }
         } catch (error) {
             console.log(error);
@@ -124,7 +134,7 @@ const ClientsListTable = () => {
      * redirects to the register view
      */
     function handleCreateClient() {
-        navigate('clients/register');
+        navigate('/clients/register');
     }
     /**
      * shows details mmodal 
@@ -132,7 +142,7 @@ const ClientsListTable = () => {
      */
     async function handleDetails(id: number) {
         const client = await getClientById(id);
-        setModalTitle('Detalles del Cliente');
+        setModalTitle('Detalles del cliente');
         setClient(client);
         setModalCase('details');
         onOpen();
@@ -142,19 +152,26 @@ const ClientsListTable = () => {
      * @param id 
      */
     function handleEditClient(id: number) {
-        navigate(`clients/edit/${id}`);
+        navigate(`/clients/edit/${id}`);
     }
     /**
      * Shows delete confirmation modal
      * @param id 
      */
     async function handleDeleteClient(id: number) {
-        const client = await getClientById(id);
-        setModalTitle('Eliminar Cliente');
-        setClient(client);
-        setModalSize('md');
-        setModalCase('delete');
-        onOpen();
+        swal({
+            title: "¿Quieres eliminar este cliente?",
+            text: "No podrás recuperar el registro, una vez eliminado.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                deleteClient(id);
+            }
+
+        });
+
     }
     /**
      * 
@@ -164,7 +181,11 @@ const ClientsListTable = () => {
         if (value != '') {
             const foundClients = await searchClients(value);
             (foundClients.length === 0)
-                ? alert('No se encontraron resultados')
+                ? swal({
+                    title: "¡Búsqueda sin resultados!",
+                    text: "Intenta de nuevo con otro nombre o apellido.",
+                    icon: "info",
+                })
                 : setClients(foundClients);
         } else {
             getClients();
@@ -254,15 +275,15 @@ const ClientsListTable = () => {
                                             <p>{client?.nombres}</p>
                                             <label><strong>Apellido(s):</strong></label>
                                             <p>{client?.apellidos}</p>
-                                            <label><strong>email:</strong></label>
+                                            <label><strong>Email:</strong></label>
                                             <p>{client?.email}</p>
                                             <label><strong>Dirección:</strong></label>
                                             <p>{client?.dirección}</p>
-                                            <label><strong>Telefono Móvil:</strong></label>
+                                            <label><strong>Telefono móvil:</strong></label>
                                             <p>{client?.telefono_movil}</p>
-                                            <label><strong>Tipo de Cliente:</strong></label>
+                                            <label><strong>Tipo de cliente:</strong></label>
                                             <p>{client?.tipo_cliente}</p>
-                                            <label><strong>Fecha de Registro:</strong></label>
+                                            <label><strong>Fecha de registro:</strong></label>
                                             <p>{client?.created_at}</p>
                                         </div>
                                         : <h1>¿Quieres eliminar el usuario : {client?.nombres}?</h1>
@@ -273,19 +294,13 @@ const ClientsListTable = () => {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>
-                                {
-                                    (modalCase === 'delete')
-                                        ?
-                                        <Button color="danger" onPress={deleteClient}>
-                                            Eliminar
-                                        </Button>
-                                        : null
-                                }
                             </ModalFooter>
                         </>
                     )}
                 </ModalContent>
             </Modal>
+            {/**Breadcum component */}
+            <BreadCum />
             {/**module title */}
             <h1 className={styles.title}><strong>Clientes</strong></h1>
             <div className={styles.filtsContainer}>
