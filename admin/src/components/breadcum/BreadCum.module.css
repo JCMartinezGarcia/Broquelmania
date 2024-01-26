@@ -4,8 +4,9 @@
 .breadCardBody{
     padding: 0rem !important;
 }
-.item{
+.items{
     display: flex;
+    padding: 1rem;
 }
 @media only screen and (min-width: 1030px) {
 
