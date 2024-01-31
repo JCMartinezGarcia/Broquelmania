@@ -9,6 +9,7 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductsClasificationController;
 use App\Http\Controllers\ProductsLinesController;
+//use App\Models\Suppliers;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 //routes
 Route::post('/user', [RegisteredUserController::class, 'store']);
 Route::get('/clients/search/{search}', [ClientsController::class, 'search']);
+Route::get('/suppliers/search/{search}', [SuppliersController::class, 'search']);
 // api routes, creates api routes for methods index, store, show, update, delete
 Route::apiResources([
     'users' => UserController::class,

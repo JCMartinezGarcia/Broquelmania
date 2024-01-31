@@ -69,6 +69,15 @@ const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
                             </span>
                         </Link>
                     </NavbarItem>
+                    <NavbarItem className={styles.sectionItems}>
+                        <Link color="foreground" href="/proveedores/listado">
+                            <FaUser />
+                            <span className="ml-4">
+                                proveedores
+                            </span>
+                        </Link>
+                    </NavbarItem>
+
                 </NavbarContent>
             </Navbar>
         </div>

@@ -35,22 +35,25 @@ class Suppliers extends Model
      */
 
     /**
-     * 
-     * 
+     * get a supplier by id
+     * @param id
      */
     public static function getSupplierInfo($id)
     {
         return self::find($id);
     }
     /**
-     * 
-     * 
+     * get all suppliers 
      */
-    public static function getAllSuppliersInfo(){
-        return self::all();
+    public static function getAllSuppliersInfo()
+    {
+        return self::orderBy('id', 'desc')
+            ->get();
     }
     /**
-     * 
+     * registers a new supplier
+     * @param request
+     * @return 
      */
     public static function registerNewSupplier($request)
     {
@@ -64,7 +67,9 @@ class Suppliers extends Model
         ]);
     }
     /**
-     * 
+     * updates supplier info
+     * @param request
+     * @param id
      */
     public static function updateSupplierInfo($request, $id)
     {
@@ -81,12 +86,29 @@ class Suppliers extends Model
         return $supplier;
     }
     /**
-     * 
-     * 
+     * soft deletes a supplier by id
+     * @param id
+     * @return supplier
      */
-    public static function softDeleteSupplier($id){
+    public static function softDeleteSupplier($id)
+    {
         $supplier = self::find($id);
         $supplier->delete();
         return $supplier;
+    }
+    /**
+     * search for suppliers matching the param 
+     * @param search
+     * @return suppliers
+     */
+    public static function searchSuppliers($search)
+    {
+        $contains = '%' . $search . '%';
+        $suppliers = self::where('nombres', 'like', $contains)
+            ->orWhere('apellidos', 'like', $contains)
+            ->orWhere('compañia', 'like', $contains)
+            ->orderBy('id', 'desc')
+            ->get();
+        return $suppliers;
     }
 }
