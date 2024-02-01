@@ -9,7 +9,7 @@ import DebtsOverview from "../../components/home/debtsoverview/DebtsOverview.tsx
 import styles from "./Home.module.css"
 const Home = () => {
 
-    const breadcumHierarchy: string[] = ['Home', 'Dashboard'];
+  
     const isHome: boolean = true;
     return (
         <div>
@@ -19,7 +19,7 @@ const Home = () => {
                     <SideBar isHomeView={isHome} />
                 </div>
                 <div className={styles.dashboardContainer}>
-                    <BreadCum herarchy={breadcumHierarchy} />
+                    <BreadCum />
                     <div className={styles.cardsOverviewsContainer}>
                         <HomeCard />
                         <HomeCard />

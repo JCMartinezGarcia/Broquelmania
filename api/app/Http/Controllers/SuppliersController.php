@@ -51,4 +51,12 @@ class SuppliersController extends Controller
         $supplier = Suppliers::softDeleteSupplier($id);
         return response()->json($supplier);
     }
+    /**
+     * 
+     */
+    public function search(string $searchParam)
+    {
+        $suppliers = Suppliers::searchSuppliers($searchParam);
+        return response()->json($suppliers);
+    }
 }

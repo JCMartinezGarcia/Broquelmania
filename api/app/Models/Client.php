@@ -106,7 +106,6 @@ class Client extends Model
      */
     public static function searchClients($search)
     {
-        $starts = $search . '%';
         $contains = '%' . $search . '%';
         $clients = self::where('nombres', 'like', $contains)
             ->orWhere('apellidos', 'like', $contains)

@@ -46,17 +46,7 @@ const BreadCum = () => {
                 <CardBody className={styles.breadCardBody}>
                     <nav>
                         <ul className={styles.items}>
-                            {/** 
-                                <NavbarItem>
-                                <Link color="foreground" href="/">
-                                    Home
-                                </Link>
-                            </NavbarItem>
-                            <span>{'>>'}</span>
-                            <NavbarItem>
-                                Dashboard
-                            </NavbarItem>
-                            **/
+                            {
                                 navItems
                             }
 
