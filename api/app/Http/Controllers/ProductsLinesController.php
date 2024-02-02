@@ -30,7 +30,8 @@ class ProductsLinesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $line = ProductLine::getLine($id);
+        return response()->json($line);
     }
 
     /**
@@ -49,5 +50,13 @@ class ProductsLinesController extends Controller
     {
         $line = ProductLine::deleteProductsLine($id);
         return response()->json($line);
+    }
+    /**
+     * 
+     */
+    public function search(string $search)
+    {
+        $lines = ProductLine::searchLines($search);
+        return response()->json($lines);
     }
 }

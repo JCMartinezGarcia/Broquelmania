@@ -4,6 +4,8 @@ import Clients from './views/clients/list/Clients.tsx';
 import Suppliers from './views/suppliers/Suppliers.tsx';
 import SuppliersRegister from './views/suppliers/SuppliersRegister.tsx';
 import SuppliersEdit from './views/suppliers/SuppliersEdit.tsx';
+import ProductsLine from './views/productsline/ProductsLine.tsx';
+import ProductsLineRegister from './views/productsline/ProductsLineRegister.tsx';
 
 import './App.css'
 
@@ -21,6 +23,8 @@ function App() {
           <Route path='/proveedores/listado' element={<Suppliers />} />
           <Route path="/proveedores/registro" element={<SuppliersRegister />} />
           <Route path="/proveedores/editar/:id" element={<SuppliersEdit />} />
+          <Route path="/productos/lineas/listado" element={<ProductsLine />} />
+          <Route path="/productos/lineas/registrar" element={<ProductsLineRegister />} />
         </Routes>
       </Router>
     </>
