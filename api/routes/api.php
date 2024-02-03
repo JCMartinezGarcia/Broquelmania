@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::post('/user', [RegisteredUserController::class, 'store']);
 Route::get('/clients/search/{search}', [ClientsController::class, 'search']);
 Route::get('/suppliers/search/{search}', [SuppliersController::class, 'search']);
+Route::get('/products-lines/search/{search}', [ProductsLinesController::class, 'search']);
 // api routes, creates api routes for methods index, store, show, update, delete
 Route::apiResources([
     'users' => UserController::class,

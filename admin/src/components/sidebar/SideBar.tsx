@@ -65,7 +65,7 @@ const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
                         <Link color="foreground" href="/clients">
                             <FaUser />
                             <span className="ml-4">
-                                clientes
+                                Clientes
                             </span>
                         </Link>
                     </NavbarItem>
@@ -73,11 +73,18 @@ const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
                         <Link color="foreground" href="/proveedores/listado">
                             <FaUser />
                             <span className="ml-4">
-                                proveedores
+                                Proveedores
                             </span>
                         </Link>
                     </NavbarItem>
-
+                    <NavbarItem className={styles.sectionItems}>
+                        <Link color="foreground" href="/productos/lineas/listado">
+                            <FaUser />
+                            <span className="ml-4">
+                                Linea de productos
+                            </span>
+                        </Link>
+                    </NavbarItem>
                 </NavbarContent>
             </Navbar>
         </div>
