@@ -21,7 +21,23 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Products::registerNewProduct($request);
+        //validate incoming request data 
+        $validated = $request->validate([
+            'id_proveedor' => 'required|integer|numeric',
+            'id_clasificacion' => 'required|integer|numeric',
+            'id_linea_producto' => 'required|integer|numeric',
+            'modelo' => 'required|string',
+            'peso' => 'required|numeric',
+            'precio_unitario' => 'required|numeric',
+            'stock_unitario' => 'required|numeric',
+            'stock_gramos' => 'required|numeric',
+            'descripcion' => 'required|string',
+            'imagen' => 'required|string',
+            'id_material' => 'required|integer|numeric',
+        ]);
+        //call register method
+        $product = Products::registerNewProduct($validated);
+        //return registered product
         return response()->json($product);
     }
 

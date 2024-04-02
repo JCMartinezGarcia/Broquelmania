@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Products extends Model
 {
@@ -16,11 +17,12 @@ class Products extends Model
      * @var array
      */
     protected $fillable = [
+        'image',
         'id_proveedor',
         'id_clasificacion',
         'id_linea_producto',
+        'id_material',
         'modelo',
-        'material',
         'peso',
         'precio_unitario',
         'stock_unitario',
@@ -33,25 +35,46 @@ class Products extends Model
      */
     public static function getAllProductsInfo()
     {
-        return self::all();
+        return DB::table('products as pd')
+            ->join('suppliers as sp', 'pd.id_proveedor', '=', 'sp.id')
+            ->join('product_clasifications as cls', 'pd.id_clasificacion', '=', 'cls.id')
+            ->join('product_lines as pl', 'pd.id_linea_producto', '=', 'pl.id')
+            ->join('materiales as mt', 'pd.id_material', '=', 'mt.id')
+            ->select(
+                'pd.id',
+                'pd.image as imagen',
+                'pd.modelo',
+                'pd.peso',
+                'pd.precio_unitario as precio',
+                'pd.stock_unitario as stock',
+                'pd.stock_gramos as gramos',
+                'pd.descripcion',
+                'sp.compañia as proveedor',
+                'cls.clasificacion_producto as clasificacion',
+                'pl.linea_producto as linea',
+                'mt.material'
+            )
+            ->get();
     }
 
     /**
      * 
      */
-    public static function registerNewProduct($request)
+    public static function registerNewProduct($product)
     {
+
         return self::create([
-            'id_proveedor' => $request->id_proveedor,
-            'id_clasificacion' => $request->id_clasificacion,
-            'id_linea_producto' => $request->id_linea_producto,
-            'modelo' => $request->modelo,
-            'material' => $request->material,
-            'peso' => $request->peso,
-            'precio_unitario' => $request->precio_unitario,
-            'stock_unitario' => $request->stock_unitario,
-            'stock_gramos' => $request->stock_gramos,
-            'descripcion' => $request->descripcion
+            'image' => $product['imagen'],
+            'id_proveedor' => $product['id_proveedor'],
+            'id_clasificacion' => $product['id_clasificacion'],
+            'id_linea_producto' => $product['id_linea_producto'],
+            'id_material' => $product['id_material'],
+            'modelo' => $product['modelo'],
+            'peso' => $product['peso'],
+            'precio_unitario' => $product['precio_unitario'],
+            'stock_unitario' => $product['stock_unitario'],
+            'stock_gramos' => $product['stock_gramos'],
+            'descripcion' => $product['descripcion']
         ]);
     }
 
@@ -66,7 +89,6 @@ class Products extends Model
         $product->id_clasificacion = $request->id_clasificacion;
         $product->id_linea_producto = $request->id_linea_producto;
         $product->modelo = $request->modelo;
-        $product->material = $request->material;
         $product->peso = $request->peso;
         $product->precio_unitario = $request->precio_unitario;
         $product->stock_unitario = $request->stock_unitario;
@@ -79,14 +101,16 @@ class Products extends Model
     /**
      * 
      */
-    public static function getProductsDetailsInfo($id){
+    public static function getProductsDetailsInfo($id)
+    {
         return self::find($id);
     }
 
     /**
      * 
      */
-    public static function softDeleteProduct($id){
+    public static function softDeleteProduct($id)
+    {
         $product = self::find($id);
         $product->delete();
         return $product;

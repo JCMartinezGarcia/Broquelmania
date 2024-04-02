@@ -6,7 +6,7 @@ import {
     Accordion,
     AccordionItem,
 } from "@nextui-org/react";
-import { FaHome, FaUser } from 'react-icons/fa';
+import { FaHome, FaUser, FaGem } from 'react-icons/fa';
 import styles from "./SideBar.module.css";
 
 interface SideProps {
@@ -82,6 +82,14 @@ const SideBar: React.FC<SideProps> = ({ isHomeView }) => {
                             <FaUser />
                             <span className="ml-4">
                                 Linea de productos
+                            </span>
+                        </Link>
+                    </NavbarItem>
+                    <NavbarItem className={styles.sectionItems}>
+                        <Link color="foreground" href="/productos/listado">
+                            <FaGem />
+                            <span className="ml-4">
+                                Productos
                             </span>
                         </Link>
                     </NavbarItem>
