@@ -9,6 +9,7 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductsClasificationController;
 use App\Http\Controllers\ProductsLinesController;
+use App\Http\Controllers\MaterialsController;
 //use App\Models\Suppliers;
 
 /*
@@ -40,4 +41,5 @@ Route::apiResources([
     'products' => ProductsController::class,
     'products-classification' => ProductsClasificationController::class,
     'products-lines' => ProductsLinesController::class,
+    'materials' => MaterialsController::class,
 ]);

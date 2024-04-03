@@ -1,0 +1,28 @@
+.sectionTitle {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.formCard {
+    width: 60%;
+    margin: auto;
+}
+
+.formInputs {
+    margin-bottom: 1rem;
+}
+
+.formError{
+    color: red;
+    font-size: x-small;
+    margin-bottom: 1rem;
+}
+.regButton {
+    display: block;
+    margin-top: 1rem;
+    float: right;
+}
+.regButton:hover{
+   cursor: pointer;
+}
