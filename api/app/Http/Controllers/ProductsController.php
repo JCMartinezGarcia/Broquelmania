@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Products;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Auth\Events\Validated;
 
 class ProductsController extends Controller
 {
@@ -23,19 +25,33 @@ class ProductsController extends Controller
     {
         //validate incoming request data 
         $validated = $request->validate([
-            'id_proveedor' => 'required|integer|numeric',
-            'id_clasificacion' => 'required|integer|numeric',
-            'id_linea_producto' => 'required|integer|numeric',
+            'proveedor' => 'required|integer|numeric',
+            'clasificacion' => 'required|integer|numeric',
+            'linea' => 'required|integer|numeric',
             'modelo' => 'required|string',
             'peso' => 'required|numeric',
-            'precio_unitario' => 'required|numeric',
+            'precio' => 'required|numeric',
             'stock_unitario' => 'required|numeric',
-            'stock_gramos' => 'required|numeric',
             'descripcion' => 'required|string',
-            'imagen' => 'required|string',
-            'id_material' => 'required|integer|numeric',
+            'image' => 'required',
+            'material' => 'required|integer|numeric',
         ]);
+        //upload image to cloudinary
+        $image = $request->file('image');
+        // Upload image to Cloudinary
+        $uploadResult = Cloudinary::upload(
+            $image[0]->getPathname(),
+            [
+                'public_id' => $validated['modelo'],
+                'folder' => 'broquelmania/clients/broquelmania/products',
+                //'use_filename' => TRUE,
+                'overwrite' => TRUE
+            ]
+        );
+        // Get the URL of the uploaded image
+        $imageUrl = $uploadResult->getSecurePath();        
         //call register method
+        $validated['image'] = $imageUrl;
         $product = Products::registerNewProduct($validated);
         //return registered product
         return response()->json($product);

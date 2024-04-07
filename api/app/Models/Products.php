@@ -54,6 +54,8 @@ class Products extends Model
                 'pl.linea_producto as linea',
                 'mt.material'
             )
+            ->where('pd.deleted_at',  null)
+            ->orderBy('pd.id', 'desc')
             ->get();
     }
 
@@ -62,18 +64,20 @@ class Products extends Model
      */
     public static function registerNewProduct($product)
     {
-
+        //calulate gr to insert 
+        $stockGr = $product['peso'] * $product['stock_unitario'];
+        //insert into db
         return self::create([
-            'image' => $product['imagen'],
-            'id_proveedor' => $product['id_proveedor'],
-            'id_clasificacion' => $product['id_clasificacion'],
-            'id_linea_producto' => $product['id_linea_producto'],
-            'id_material' => $product['id_material'],
+            'image' => $product['image'],
+            'id_proveedor' => $product['proveedor'],
+            'id_clasificacion' => $product['clasificacion'],
+            'id_linea_producto' => $product['linea'],
+            'id_material' => $product['material'],
             'modelo' => $product['modelo'],
             'peso' => $product['peso'],
-            'precio_unitario' => $product['precio_unitario'],
+            'precio_unitario' => $product['precio'],
             'stock_unitario' => $product['stock_unitario'],
-            'stock_gramos' => $product['stock_gramos'],
+            'stock_gramos' => $stockGr,
             'descripcion' => $product['descripcion']
         ]);
     }
