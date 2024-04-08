@@ -14,6 +14,7 @@ import {
     Input, Button,
     Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
     Pagination,
+    Image
 } from "@nextui-org/react";
 //plugins imports
 import swal from "sweetalert";
@@ -22,6 +23,7 @@ import { FaSearch, FaUserEdit, FaEye, FaTrashAlt, FaPlus } from "react-icons/fa"
 import axios from "axios";
 //css imports
 import styles from "./Products.module.css";
+import { uid } from "chart.js/helpers";
 
 
 interface Products {
@@ -41,11 +43,12 @@ interface Products {
 }
 // table columns 
 const columns = [
+    { name: "IMAGEN", uid: "imagen" },
     { name: "MODELO", uid: "modelo" },
     { name: "DESCRIPCIÓN", uid: "descripcion" },
     { name: "PROVEEDOR", uid: "proveedor" },
     { name: "CLASIFICACIÓN", uid: "clasificacion" },
-    { name: "PRECIO", uid: "precio" },
+    { name: "PRECIO(MXN)", uid: "precio" },
     { name: "ACCIONES", uid: "actions" },
     //{ name: "LINEA DE PRODUCTO", uid: "linea_producto" },
     //{ name: "ACCIONES", uid: "actions" }
@@ -212,6 +215,17 @@ const Products = () => {
         const cellValue = product[columnKey];
 
         switch (columnKey) {
+            case "imagen":
+                return (
+                    <Image
+                        isZoomed
+                        width={60}
+                        alt="Imagen del producto"
+                        src={product.imagen}
+                    />
+                );
+            case "precio":
+                return "$" + cellValue
             /* case "nombres":
                  return (
  

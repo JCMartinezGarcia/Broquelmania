@@ -1,24 +1,26 @@
 import BreadCum from "../breadcum/BreadCum";
 import { Card, CardBody, Input, Textarea, Image, Select, SelectItem } from "@nextui-org/react";
+import { FaDollarSign, FaWeightHanging, FaWarehouse } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
+import { useState } from "react";
 import axios from "axios";
 import styles from "./FormRegister.module.css";
-import { useState } from "react";
 
 // defines the datatypes of the form inputs
 interface FData {
-    image: string
+    image: any,
     modelo: string,
     descripcion: string,
     proveedor: number,
     clasificacion: number,
     linea: number,
     material: number,
-    peso_unitario: number,
-    precio_unitario: number,
+    peso: number,
+    precio: number,
     stock_unitario: number,
+    stock_gramos: number
 
 }
 //defynes types of suppliers data
@@ -69,6 +71,35 @@ const FormRegister: React.FC<FormRegisterProps> = (
      * called on form submit and passes the data to register new line
      */
     const onSubmit = handleSubmit((data) => {
+        /* const {
+             image,
+             modelo,
+             descripcion,
+             proveedor,
+             clasificacion,
+             linea,
+             material,
+             peso,
+             precio,
+             stock_gramos,
+             stock_unitario
+         } = data;
+         console.log(modelo);
+         //create form data object
+         const formData = new FormData();
+         formData.append('image', image);
+         formData.append('modelo', modelo);
+         formData.append('descripcion', descripcion);
+         formData.append('proveedor', proveedor.toString());
+         formData.append('clasificacion', clasificacion.toString());
+         formData.append('linea', linea.toString());
+         formData.append('material', material.toString());
+         formData.append('peso', peso.toString());
+         formData.append('precio', precio.toString());
+         formData.append('stock_gramos', stock_gramos.toString());
+         formData.append('stock_unitario', stock_unitario.toString());
+         console.log('form data:', formData);*/
+        //call register function
         registerProduct(data);
     });
 
@@ -79,7 +110,11 @@ const FormRegister: React.FC<FormRegisterProps> = (
     async function registerProduct(data: FData) {
         try {
             //post to server
-            const res = await axios.post('/products', data);
+            const res = await axios.post('/products', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             //validate if reponse is successfull
             if (res.status === 200) {
                 console.log('returned data:', res.data);
@@ -117,6 +152,8 @@ const FormRegister: React.FC<FormRegisterProps> = (
                 <CardBody>
                     <form onSubmit={onSubmit}>
                         {/**file display */}
+                        {(file) ? <label><strong>Imagen:</strong></label> : null}
+
                         <Image
                             loading="lazy"
                             isBlurred
@@ -226,7 +263,7 @@ const FormRegister: React.FC<FormRegisterProps> = (
                         {errors.material && <p className={styles.formError}>{errors.material.message}</p>}
                         {/**price input */}
                         <Input
-                            {...register("precio_unitario",
+                            {...register("precio",
                                 {
                                     required: "* Este campo es requerido."
                                 })}
@@ -234,13 +271,20 @@ const FormRegister: React.FC<FormRegisterProps> = (
                             size="sm"
                             type="number"
                             min={1}
-                            label="Precio"
+                            label="Precio(MXN)"
                             placeholder="Ingresa precio.."
+                            startContent={
+                                <div className="pointer-events-none flex items-center">
+                                    <span className="text-default-400 text-small">
+                                        <FaDollarSign />
+                                    </span>
+                                </div>
+                            }
                         />
-                        {errors.precio_unitario && <p className={styles.formError}>{errors.precio_unitario.message}</p>}
+                        {errors.precio && <p className={styles.formError}>{errors.precio.message}</p>}
                         {/**weight input */}
                         <Input
-                            {...register("peso_unitario",
+                            {...register("peso",
                                 {
                                     required: "* Este campo es requerido."
                                 })}
@@ -248,10 +292,17 @@ const FormRegister: React.FC<FormRegisterProps> = (
                             size="sm"
                             type="number"
                             min={1}
-                            label="Peso"
-                            placeholder="Ingresa peso.."
+                            label="Peso(gr)"
+                            placeholder="Ingresa peso en gramos.."
+                            startContent={
+                                <div className="pointer-events-none flex items-center">
+                                    <span className="text-default-400 text-small">
+                                        <FaWeightHanging />
+                                    </span>
+                                </div>
+                            }
                         />
-                        {errors.peso_unitario && <p className={styles.formError}>{errors.peso_unitario.message}</p>}
+                        {errors.peso && <p className={styles.formError}>{errors.peso.message}</p>}
                         {/**stock input */}
                         <Input
                             {...register("stock_unitario",
@@ -262,8 +313,15 @@ const FormRegister: React.FC<FormRegisterProps> = (
                             size="sm"
                             type="number"
                             min={1}
-                            label="Stock"
-                            placeholder="Ingresa stock.."
+                            label="Stock(unidades)"
+                            placeholder="Ingresa unidades.."
+                            startContent={
+                                <div className="pointer-events-none flex items-center">
+                                    <span className="text-default-400 text-small">
+                                        <FaWarehouse />
+                                    </span>
+                                </div>
+                            }
                         />
                         {errors.stock_unitario && <p className={styles.formError}>{errors.stock_unitario.message}</p>}
 
