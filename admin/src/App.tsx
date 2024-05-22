@@ -7,6 +7,7 @@ import SuppliersEdit from './views/suppliers/SuppliersEdit.tsx';
 import ProductsLine from './views/productsline/ProductsLine.tsx';
 import Products from './views/products/Products.tsx';
 import ProductsRegister from './views/products/ProductsRegister.tsx';
+import ProductsEdit from './views/products/ProductsEdit.tsx';
 import ProductsLineRegister from './views/productsline/ProductsLineRegister.tsx';
 
 import './App.css'
@@ -27,6 +28,7 @@ function App() {
           <Route path="/proveedores/editar/:id" element={<SuppliersEdit />} />
           <Route path="/productos/listado" element={<Products />} />
           <Route path="/productos/registrar" element={<ProductsRegister />} />
+          <Route path="/productos/editar/:id" element={<ProductsEdit />} />
           <Route path="/productos/lineas/listado" element={<ProductsLine />} />
           <Route path="/productos/lineas/registrar" element={<ProductsLineRegister />} />
         </Routes>

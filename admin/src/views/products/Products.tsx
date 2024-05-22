@@ -36,8 +36,8 @@ interface Products {
     material: string,
     peso: number,
     precio: number,
-    stock_unitario: number,
-    stock_gramos: number,
+    stock: number,
+    gramos: number,
     descripcion: string,
     actions: string
 }
@@ -103,8 +103,9 @@ const Products = () => {
     async function getProduct(id: number) {
         try {
             const { data, status } = await axios.get(`/products/${id}`);
+            console.log(data)
             if (status === 200) {
-                return data;
+                return data[0];
             }
         } catch (error) {
             console.log(error);
@@ -126,7 +127,7 @@ const Products = () => {
         }
     }
     /**
-     * handles logic to delete a product
+     * Handles logic to delete a product
      * @param id 
      */
     async function deleteProduct(id: number) {
@@ -140,8 +141,6 @@ const Products = () => {
                 }).then(() => {
                     getProducts();
                 });
-
-
             }
         } catch (error) {
             console.log(error);
@@ -222,6 +221,7 @@ const Products = () => {
                         width={60}
                         alt="Imagen del producto"
                         src={product.imagen}
+                        style={{ cursor: "pointer" }}
                     />
                 );
             case "precio":
@@ -301,10 +301,59 @@ const Products = () => {
                             <ModalHeader className="flex flex-col gap-1">{modalTitle}</ModalHeader>
                             <ModalBody>
                                 <div>
-                                    <label><strong>Modelo:</strong></label>
-                                    <p>{product?.modelo}</p>
-                                    <label><strong>Fecha de registro:</strong></label>
+                                    <label><strong>Imagen:</strong></label>
+                                    <Image
+                                        isZoomed
+                                        width={100}
+                                        height={90}
+                                        alt="Imagen del producto"
+                                        src={product?.imagen}
+                                        style={{ cursor: "pointer" }}
+                                    />
+                                    <label><strong>Descripción:</strong></label>
                                     <p>{product?.descripcion}</p>
+                                    <div className="flex flex-row">
+                                        <div className="basis-1/3">
+                                            <label><strong>Modelo:</strong></label>
+                                            <p>{product?.modelo}</p>
+                                        </div>
+                                        <div className="basis-1/3">
+                                            <label><strong>Proveedor:</strong></label>
+                                            <p>{product?.proveedor}</p>
+                                        </div>
+                                        <div className="basis-1/3">
+                                            <label><strong>Clasificación:</strong></label>
+                                            <p>{product?.clasificacion}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <div className="basis-1/3">
+                                            <label><strong>Linea:</strong></label>
+                                            <p>{product?.linea}</p>
+                                        </div>
+                                        <div className="basis-1/3">
+                                            <label><strong>Material:</strong></label>
+                                            <p>{product?.material}</p>
+                                        </div>
+                                        <div className="basis-1/3">
+                                            <label><strong>Precio(MXN):</strong></label>
+                                            <p>${product?.precio}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <div className="basis-1/3">
+                                            <label><strong>Peso:</strong></label>
+                                            <p>{product?.peso}gr</p>
+                                        </div>
+                                        <div className="basis-1/3">
+                                            <label><strong>Stock(unidades):</strong></label>
+                                            <p>{product?.stock}</p>
+                                        </div>
+                                        <div className="basis-1/3">
+                                            <label><strong>Stock Gramos:</strong></label>
+                                            <p>{product?.gramos}gr</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
