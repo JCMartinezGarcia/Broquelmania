@@ -49,10 +49,11 @@ class ProductsController extends Controller
             ]
         );
         // Get the URL of the uploaded image
-        $imageUrl = $uploadResult->getSecurePath();        
-        //call register method
+        $imageUrl = $uploadResult->getSecurePath();
+        //set img url to validated data 
         $validated['image'] = $imageUrl;
-        $product = Products::registerNewProduct($validated);
+        //call register method
+        $product = Products::register($validated);
         //return registered product
         return response()->json($product);
     }
@@ -62,7 +63,7 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        $product = Products::getProductsDetailsInfo($id);
+        $product = Products::getProductDetails($id);
         return response()->json($product);
     }
 
@@ -71,8 +72,23 @@ class ProductsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Products::updateProductInfo($request, $id);
-        return response()->json($product);
+        //validate incoming request data 
+        $validated = $request->validate([
+            'proveedor' => 'required|string',
+            'clasificacion' => 'required|string',
+            'linea' => 'required|string',
+            'modelo' => 'required|string',
+            'peso' => 'required|numeric',
+            'precio' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'descripcion' => 'required|string',
+            'imagen' => 'required|string',
+            'material' => 'required|string',
+        ]);
+        //call edit function 
+        $p = Products::edit($request, $id);
+        //returns json response
+        return response()->json($p);
     }
 
     /**
@@ -80,7 +96,45 @@ class ProductsController extends Controller
      */
     public function destroy(string $id)
     {
-        $product = Products::softDeleteProduct($id);
+        //call to delete function
+        $p = Products::remove($id);
+        //returns deleted product
+        return response()->json($p);
+    }
+    /**
+     * gets the product to be updated
+     */
+    public function showEdit(string $id)
+    {
+        $product = Products::getProductEdit($id);
         return response()->json($product);
+    }
+
+    /**
+     * uploads product images to cloudinary
+     * @param request
+     */
+    public function fileUpload(Request $request)
+    {
+        //validate incoming request data 
+        $validated = $request->validate([
+            'model' => 'required|string',
+            'file' => 'required',
+        ]);
+        //get file from request
+        $image = $request->file('file');
+        // Upload image to Cloudinary
+        $uploadResult = Cloudinary::upload(
+            $image[0]->getPathname(),
+            [
+                'public_id' => $validated['model'],
+                'folder' => 'broquelmania/clients/broquelmania/products',
+                //'use_filename' => TRUE,
+                'overwrite' => TRUE
+            ]
+        );
+        // Get the URL of the uploaded image
+        $imageUrl = $uploadResult->getSecurePath();
+        return response()->json($imageUrl);
     }
 }

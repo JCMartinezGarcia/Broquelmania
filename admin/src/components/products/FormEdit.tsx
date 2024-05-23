@@ -1,26 +1,30 @@
 import BreadCum from "../breadcum/BreadCum";
-import { Card, CardBody, Input, Textarea, Image, Select, SelectItem } from "@nextui-org/react";
-import { FaDollarSign, FaWeightHanging, FaWarehouse } from "react-icons/fa";
+import { Card, CardBody, Input, Textarea, Image, Select, SelectItem, Button } from "@nextui-org/react";
+import { FaDollarSign, FaWeightHanging, FaWarehouse, FaEdit } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import swal from "sweetalert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "./FormRegister.module.css";
+import styles from "./FormEdit.module.css";
+
+/**
+ * Interfaces / Types
+ */
 
 // defines the datatypes of the form inputs
 interface FData {
-    image: any,
+    imagen: any,
     modelo: string,
     descripcion: string,
-    proveedor: number,
-    clasificacion: number,
-    linea: number,
-    material: number,
+    proveedor: string,
+    clasificacion: string,
+    linea: string,
+    material: string,
     peso: number,
     precio: number,
-    stock_unitario: number,
-    stock_gramos: number
+    stock: number,
+    gramos: number
 
 }
 //defynes types of suppliers data
@@ -49,79 +53,132 @@ interface Materials {
     material: string,
 }
 // Define the type of form props
-interface FormRegisterProps {
+interface FormEditProps {
     suppliers: Supliers[];
     classifications: Classifications[];
     lines: Lines[];
     materials: Materials[];
 }
-const FormRegister: React.FC<FormRegisterProps> = (
+type EditProduct = {
+    imagen: any;
+    modelo: string;
+    descripcion: string;
+    proveedor: string;
+    clasificacion: string;
+    linea: string;
+    material: string;
+    peso: string;
+    precio: string;
+    stock: string;
+    gramos: string;
+}
+const FormEdit: React.FC<FormEditProps> = (
     {
         suppliers,
         classifications,
         lines,
         materials
     }) => {
+    const {
+        register
+        , handleSubmit
+        , formState: { errors }
+        , control
+        , reset
+        , setValue
+    } = useForm<FData>();
     //hooks
-    const { register, handleSubmit, formState: { errors }, control } = useForm<FData>();
+    const { id } = useParams();
+    useEffect(() => {
+        if (id) {
+            getProduct(Number(id));
+        }
+    }, []);
     const navigate = useNavigate();
     //states
     const [file, setFile] = useState<string | null>(null);
+    const [editSupplier, setEditSupplier] = useState<boolean>(false);
+    const [editClass, setEditClass] = useState<boolean>(false);
+    const [editLine, setEditLine] = useState<boolean>(false);
+    const [editMaterial, setEditMaterial] = useState<boolean>(false);
+    const [editImagen, setEditImagen] = useState<boolean>(false);
+
+    //Functions
+
     /**
-     * called on form submit and passes the data to register new line
+     * Called on form submit and passes the data to edit a product
      */
     const onSubmit = handleSubmit((data) => {
-        /* const {
-             image,
-             modelo,
-             descripcion,
-             proveedor,
-             clasificacion,
-             linea,
-             material,
-             peso,
-             precio,
-             stock_gramos,
-             stock_unitario
-         } = data;
-         console.log(modelo);
-         //create form data object
-         const formData = new FormData();
-         formData.append('image', image);
-         formData.append('modelo', modelo);
-         formData.append('descripcion', descripcion);
-         formData.append('proveedor', proveedor.toString());
-         formData.append('clasificacion', clasificacion.toString());
-         formData.append('linea', linea.toString());
-         formData.append('material', material.toString());
-         formData.append('peso', peso.toString());
-         formData.append('precio', precio.toString());
-         formData.append('stock_gramos', stock_gramos.toString());
-         formData.append('stock_unitario', stock_unitario.toString());
-         console.log('form data:', formData);*/
-        //call register function
-        registerProduct(data);
+        const { imagen } = data;
+        //validate if file is empty
+        if (typeof imagen === 'object') {
+            if (imagen.length === 0) {
+                //if empty, set file state value to obj property
+                data.imagen = file;
+            }
+        }
+        //call edit function
+        editProduct(data);
     });
 
-    // axios functions
+    function setImgOnMount(img: string) {
+        setFile(img);
+    }
+
+    // Axios functions
     /**
-     * sends the form values to the server to register a new product
+     * sends file to server to be uploaded and returns the url
+     * @param file 
+     * @param model 
+     * @returns 
      */
-    async function registerProduct(data: FData) {
-        console.log(data); return
+    async function uploadFile(file: FData, model: String) {
+        //create  file object 
+        const fileObj = {
+            file,
+            model
+        }
+        //make axios request
         try {
-            //post to server
-            const res = await axios.post('/products', data, {
+            const { data, status } = await axios.post('products/fileupload', fileObj, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
+            });
+            if (status == 200) {
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    /**
+     * sends the form values to the server to edit an existing product
+     * @param data 
+     */
+    async function editProduct(data: FData) {
+        //upload file
+        const { imagen, modelo } = data;
+        //validate if imagen is file type, if true upload file
+        if (typeof imagen == 'object') {
+            const fileUrl = await uploadFile(imagen, modelo);
+            //set file url value
+            data.imagen = fileUrl;
+        }
+        //make put request 
+        try {
+            const res = await axios({
+                method: 'put',
+                url: `/products/${id}`,
+                data
             });
             //validate if reponse is successfull
             if (res.status === 200) {
                 //show success message
                 swal({
-                    title: "Producto registrado!",
-                    text: "Se registró el producto con éxito.",
+                    title: "¡Producto editado!",
+                    text: "Se editó el producto exitosamente.",
                     icon: "success"
                 }).then((action) => {
                     //redirects to clients list table
@@ -133,27 +190,109 @@ const FormRegister: React.FC<FormRegisterProps> = (
             console.log(error);
         }
     }
-
+    /**
+     * gets the product to be updated
+     * @param id 
+     */
+    async function getProduct(id: number) {
+        try {
+            const { data, status } = await axios.get(`products/${id}`);
+            if (status == 200 && data.length > 0) {
+                setImgOnMount(data[0].imagen);
+                reset(data[0]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     //functions
+    /**
+     * gets the selected file, creates an URL and uses and state to save it
+     * @param e 
+     */
     function getFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files && e.target.files.length > 0) {
             setFile(URL.createObjectURL(e.target.files[0]));
         } else {
-            setFile(null);
+            //sets edit image state to false, to make edit button appear and hide file input
+            setEditImagen(false);
         }
     }
+    /**
+     * change editSuppliers state 
+     */
+    function editSuppliers() {
+        (editSupplier) ? setEditSupplier(false) : setEditSupplier(true);
+    }
+    /**
+     * changes editClass state
+     */
+    function editClasses() {
+        (editClass) ? setEditClass(false) : setEditClass(true);
+    }
+    /**
+     * changes editLine state
+     */
+    function editLines() {
+        (editLine) ? setEditLine(false) : setEditLine(true);
+    }
+    /**
+     * changes editMaterials state
+     */
+    function editMaterials() {
+        (editMaterial) ? setEditMaterial(false) : setEditMaterial(true);
+    }
+    /**
+     * changes editImage state
+     */
+    function editImage() {
+        (editImagen) ? setEditImagen(false) : setEditImagen(true);
+    }
+    /**
+     * sets the new supplier value to be updated
+     * @param e 
+     */
+    function handleSupplierEdit(e: React.ChangeEvent<HTMLInputElement>) {
+        const { value } = e.target;
+        setValue('proveedor', value);
+    }
+    /**
+     * sets the new class value to be updated
+     * @param e 
+     */
+    function handleClassEdit(e: React.ChangeEvent<HTMLInputElement>) {
+        const { value } = e.target;
+        setValue('clasificacion', value);
+    }
+    /**
+     * sets the new line value to be updated
+     * @param e 
+     */
+    function handleLineEdit(e: React.ChangeEvent<HTMLInputElement>) {
+        const { value } = e.target;
+        setValue('linea', value);
+    }
+    /**
+     * sets the new material value to be updated
+     * @param e 
+     */
+    function handleMaterialEdit(e: React.ChangeEvent<HTMLInputElement>) {
+        const { value } = e.target;
+        setValue('material', value);
+    }
+
+
     return (
         <div>
             {/**Breadcum component */}
             <BreadCum />
-            <h1 className={styles.sectionTitle}><strong>Registrar Producto</strong></h1>
+            <h1 className={styles.sectionTitle}><strong>Editar Producto</strong></h1>
             <Card className={styles.formCard}>
                 <CardBody>
                     <form onSubmit={onSubmit}>
                         {/**file display */}
                         {(file) ? <label><strong>Imagen:</strong></label> : null}
-
                         <Image
                             loading="lazy"
                             isBlurred
@@ -165,19 +304,22 @@ const FormRegister: React.FC<FormRegisterProps> = (
                         <div className="flex flex-row">
                             <div className="basis-1/2 mr-2">
                                 {/**image input */}
+                                <Button
+                                    className={(!editImagen) ? styles.formInputs : styles.inputHidden}
+                                    color="default" endContent={<FaEdit />} onClick={editImage}>
+                                    Editar imagen
+                                </Button>
+
                                 <Input
-                                    {...register("image",
-                                        {
-                                            required: "* Este campo es requerido."
-                                         })}
-                                    className={styles.formInputs}
+                                    {...register("imagen")}
+                                    className={(editImagen) ? styles.formInputs : styles.inputHidden}
                                     size="sm"
                                     type="file"
                                     label="Imagen"
                                     placeholder="Selecciona imagen.."
                                     onChange={getFile}
                                 />
-                                {errors.image && <p className={styles.formError}>{errors.image.message}</p>}
+                                {errors.imagen && <p className={styles.formError}>{errors.imagen.message}</p>}
                             </div>
                             <div className="basis-1/2">
                                 {/**model input */}
@@ -209,16 +351,39 @@ const FormRegister: React.FC<FormRegisterProps> = (
                         {errors.descripcion && <p className={styles.formError}>{errors.descripcion.message}</p>}
                         <div className="flex flex-row">
                             <div className="basis-1/2 mr-2">
-                                {/** suppliers select */}
-                                <Select
+                                {/**supplier readonly input */}
+                                <Input
                                     {...register("proveedor",
-                                        { required: "* Este campo es requerido" })}
+                                        {
+                                            required: "* Este campo es requerido."
+                                        })}
+                                    isReadOnly
+                                    className={(!editSupplier) ? styles.formInputs : styles.inputHidden}
+                                    size="sm"
+                                    type="text"
+                                    label="Proveedor"
+                                    placeholder="Ingresa proveedor..."
+                                    endContent={
+                                        <FaEdit
+                                            role="button"
+                                            className="text-default-400 pointer-events-auto flex-shrink-0"
+                                            onClick={editSuppliers}
+                                        />
+                                    }
+                                />
+                                {/** suppliers select (default hidden)*/}
+                                <Select
                                     label="Proveedor"
                                     placeholder="Selecciona proveedor"
-                                    className={styles.formInputs}
+                                    className={(editSupplier) ? styles.formInputs : styles.selHide}
+                                    onChange={handleSupplierEdit}
                                 >
                                     {suppliers?.map((supplier) => (
-                                        <SelectItem key={supplier.id} value={supplier.id}>
+
+                                        <SelectItem
+                                            key={supplier.id}
+                                            value={supplier.id}
+                                        >
                                             {supplier.compañia}
                                         </SelectItem>
                                     ))}
@@ -226,13 +391,32 @@ const FormRegister: React.FC<FormRegisterProps> = (
                                 {errors.proveedor && <p className={styles.formError}>{errors.proveedor.message}</p>}
                             </div>
                             <div className="basis-1/2">
-                                {/** classification select */}
-                                <Select
+                                {/**classification readonly input */}
+                                <Input
                                     {...register("clasificacion",
-                                        { required: "* Este campo es requerido" })}
+                                        {
+                                            required: "* Este campo es requerido."
+                                        })}
+                                    isReadOnly
+                                    className={(!editClass) ? styles.formInputs : styles.inputHidden}
+                                    size="sm"
+                                    type="text"
+                                    label="Clasificación"
+                                    placeholder="Ingresa clasificación..."
+                                    endContent={
+                                        <FaEdit
+                                            role="button"
+                                            className="text-default-400 pointer-events-auto flex-shrink-0"
+                                            onClick={editClasses}
+                                        />
+                                    }
+                                />
+                                {/** classification select (default hidden)*/}
+                                <Select
                                     label="Clasificación"
                                     placeholder="Selecciona clasificación"
-                                    className={styles.formInputs}
+                                    className={(editClass) ? styles.formInputs : styles.selHide}
+                                    onChange={handleClassEdit}
                                 >
                                     {classifications?.map((classification) => (
                                         <SelectItem key={classification.id} value={classification.id}>
@@ -245,13 +429,33 @@ const FormRegister: React.FC<FormRegisterProps> = (
                         </div>
                         <div className="flex flex-row">
                             <div className="basis-1/2 mr-2">
-                                {/** lines select */}
-                                <Select
+                                {/**line readonly input */}
+                                <Input
                                     {...register("linea",
-                                        { required: "* Este campo es requerido" })}
+                                        {
+                                            required: "* Este campo es requerido."
+                                        })}
+                                    isReadOnly
+                                    className={(!editLine) ? styles.formInputs : styles.inputHidden}
+                                    size="sm"
+                                    type="text"
+                                    label="Linea"
+                                    placeholder="Ingresa linea..."
+                                    endContent={
+                                        <FaEdit
+                                            role="button"
+                                            className="text-default-400 pointer-events-auto flex-shrink-0"
+                                            onClick={editLines}
+                                        />
+                                    }
+                                />
+                                {/** lines select (default hidden)*/}
+                                <Select
+
                                     label="Linea"
                                     placeholder="Selecciona linea"
-                                    className={styles.formInputs}
+                                    className={(editLine) ? styles.formInputs : styles.selHide}
+                                    onChange={handleLineEdit}
                                 >
                                     {lines?.map((line) => (
                                         <SelectItem key={line.id} value={line.id}>
@@ -263,12 +467,31 @@ const FormRegister: React.FC<FormRegisterProps> = (
 
                             </div>
                             <div className="basis-1/2">
-                                <Select
+                                {/**material readonly input */}
+                                <Input
                                     {...register("material",
-                                        { required: "* Este campo es requerido" })}
+                                        {
+                                            required: "* Este campo es requerido."
+                                        })}
+                                    isReadOnly
+                                    className={(!editMaterial) ? styles.formInputs : styles.inputHidden}
+                                    size="sm"
+                                    type="text"
+                                    label="Material"
+                                    placeholder="Ingresa Material..."
+                                    endContent={
+                                        <FaEdit
+                                            role="button"
+                                            className="text-default-400 pointer-events-auto flex-shrink-0"
+                                            onClick={editMaterials}
+                                        />
+                                    }
+                                />
+                                <Select
                                     label="Material"
                                     placeholder="Selecciona material"
-                                    className={styles.formInputs}
+                                    className={(editMaterial) ? styles.formInputs : styles.selHide}
+                                    onChange={handleMaterialEdit}
                                 >
                                     {materials?.map((material) => (
                                         <SelectItem key={material.id} value={material.id}>
@@ -329,7 +552,7 @@ const FormRegister: React.FC<FormRegisterProps> = (
                             <div className="basis-1/3">
                                 {/**stock input */}
                                 <Input
-                                    {...register("stock_unitario",
+                                    {...register("stock",
                                         {
                                             required: "* Este campo es requerido."
                                         })}
@@ -347,7 +570,7 @@ const FormRegister: React.FC<FormRegisterProps> = (
                                         </div>
                                     }
                                 />
-                                {errors.stock_unitario && <p className={styles.formError}>{errors.stock_unitario.message}</p>}
+                                {errors.stock && <p className={styles.formError}>{errors.stock.message}</p>}
                             </div>
                         </div>
 
@@ -355,7 +578,7 @@ const FormRegister: React.FC<FormRegisterProps> = (
                             role="button"
                             type="submit"
                             color="secondary"
-                            value="Registrar"
+                            value="Actualizar"
                         />
                     </form>
                 </CardBody>
@@ -364,4 +587,4 @@ const FormRegister: React.FC<FormRegisterProps> = (
     );
 }
 
-export default FormRegister;
+export default FormEdit;

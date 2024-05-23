@@ -13,20 +13,20 @@
     margin-bottom: 1rem;
 }
 
+.inputHidden {
+    margin-bottom: 1rem;
+    display: none !important;
+}
+
+.selHide {
+    margin-bottom: 1rem;
+    display: none !important;
+}
+
 .formError {
     color: red;
     font-size: x-small;
     margin-bottom: 1rem;
-}
-
-.regButton {
-    display: block;
-    margin-top: 1rem;
-    float: right;
-}
-
-.regButton:hover {
-    cursor: pointer;
 }
 
 .productImg:hover {

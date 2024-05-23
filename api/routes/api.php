@@ -33,6 +33,8 @@ Route::post('/user', [RegisteredUserController::class, 'store']);
 Route::get('/clients/search/{search}', [ClientsController::class, 'search']);
 Route::get('/suppliers/search/{search}', [SuppliersController::class, 'search']);
 Route::get('/products-lines/search/{search}', [ProductsLinesController::class, 'search']);
+Route::post('/products/fileupload', [ProductsController::class, 'fileUpload']);
+Route::get('/products/edit/{id}', [ProductsController::class, 'showEdit']);
 // api routes, creates api routes for methods index, store, show, update, delete
 Route::apiResources([
     'users' => UserController::class,
