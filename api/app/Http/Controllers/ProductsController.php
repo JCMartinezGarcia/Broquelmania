@@ -137,4 +137,17 @@ class ProductsController extends Controller
         $imageUrl = $uploadResult->getSecurePath();
         return response()->json($imageUrl);
     }
+
+    /**
+     * Search for a product in DB
+     * @param param
+     * @return  
+     */
+    public function search($param)
+    {
+        //Call to search method
+        $p = Products::search($param);
+        //Returns found products
+        return response()->json($p);
+    }
 }

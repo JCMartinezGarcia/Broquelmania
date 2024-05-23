@@ -216,4 +216,37 @@ class Products extends Model
         //returns deleted product
         return $p;
     }
+    /**
+     * Search for products in DB
+     * @param param
+     * @return
+     */
+    public static function search($param)
+    {
+        //Query condition
+        $condition = '%' . $param . '%';
+        //Query DB and returns results
+        return DB::table('products as pd')
+            ->join('suppliers as sp', 'pd.id_proveedor', '=', 'sp.id')
+            ->join('product_clasifications as cls', 'pd.id_clasificacion', '=', 'cls.id')
+            ->join('product_lines as pl', 'pd.id_linea_producto', '=', 'pl.id')
+            ->join('materiales as mt', 'pd.id_material', '=', 'mt.id')
+            ->select(
+                'pd.id',
+                'pd.image as imagen',
+                'pd.modelo',
+                'pd.peso',
+                'pd.precio_unitario as precio',
+                'pd.stock_unitario as stock',
+                'pd.stock_gramos as gramos',
+                'pd.descripcion',
+                'sp.compañia as proveedor',
+                'cls.clasificacion_producto as clasificacion',
+                'pl.linea_producto as linea',
+                'mt.material'
+            )
+            ->where('pd.modelo', 'like', $condition)
+            ->where('pd.deleted_at', null)
+            ->get();
+    }
 }

@@ -35,6 +35,7 @@ Route::get('/suppliers/search/{search}', [SuppliersController::class, 'search'])
 Route::get('/products-lines/search/{search}', [ProductsLinesController::class, 'search']);
 Route::post('/products/fileupload', [ProductsController::class, 'fileUpload']);
 Route::get('/products/edit/{id}', [ProductsController::class, 'showEdit']);
+Route::get('/products/search/{param}', [ProductsController::class, 'search']);
 // api routes, creates api routes for methods index, store, show, update, delete
 Route::apiResources([
     'users' => UserController::class,
