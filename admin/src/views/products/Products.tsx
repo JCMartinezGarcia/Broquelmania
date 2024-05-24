@@ -112,11 +112,11 @@ const Products = () => {
         }
     }
     /**
-     * search products
+     * Search for products
      * @param searchParam 
-     * @returns data 
+     * @returns
      */
-    async function searchProducts(searchParam: string) {
+    async function search(searchParam: string) {
         try {
             const { data, status } = await axios.get(`/products/search/${searchParam}`);
             if (status === 200) {
@@ -149,19 +149,21 @@ const Products = () => {
 
     // handle functions 
     /**
-     * handles the login in order to performa a product search
+     * Handles logic to search for products
+     * @param e 
      */
     async function handleSearch(e: ChangeEvent<HTMLInputElement>) {
         const { value } = e.target;
         if (value != '') {
-            const foundProducts = await searchProducts(value);
-            (foundProducts.length === 0)
+            const products = await search(value);
+            console.log(products);
+            (products.length === 0)
                 ? swal({
                     title: "¡Búsqueda sin resultados!",
-                    text: "Intenta de nuevo con otra linea de producto.",
+                    text: "Intenta de nuevo con otro producto.",
                     icon: "info",
                 })
-                : setProducts(foundProducts);
+                : setProducts(products);
         } else {
             getProducts();
         }
