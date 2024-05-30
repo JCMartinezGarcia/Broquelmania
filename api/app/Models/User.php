@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,14 +48,16 @@ class User extends Authenticatable
      * 
      */
 
-    public static function getAll(){
+    public static function get()
+    {
         return self::all();
     }
 
     /**
      * 
      */
-    public static function getById($id){
+    public static function getById($id)
+    {
         return self::find($id);
     }
 
@@ -63,20 +65,40 @@ class User extends Authenticatable
      * 
      */
 
-     public static function updateUser($request, $id){
+    public static function updateUser($request, $id)
+    {
         $user = self::find($id);
         $user->name = $request->name;
         $user->save();
         return $user;
-     }
+    }
 
-     /**
-      * 
-      */
+    /**
+     * 
+     */
 
-      public static function deleteUser($id){
+    public static function deleteUser($id)
+    {
         $user = self::find($id);
         $user->delete();
         return $user;
-      }
+    }
+
+    /**
+     * Search for users 
+     * @param user
+     * @return 
+     */
+    public static function search($user)
+    {
+        //condition to search users
+        $condition = '%' . $user . '%';
+        //Query DB
+        $users = self::where('name', 'like', $condition)
+            ->orWhere('email', 'like', $condition)
+            ->orderBy('id', 'desc')
+            ->get();
+        //return results
+        return $users;
+    }
 }
