@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './views/home/Home.tsx';
+import Users from './views/users/Users.tsx';
+import UsersRegister from './views/users/UsersRegister.tsx';
 import Clients from './views/clients/list/Clients.tsx';
 import Suppliers from './views/suppliers/Suppliers.tsx';
 import SuppliersRegister from './views/suppliers/SuppliersRegister.tsx';
@@ -20,6 +22,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/usuarios" element={<Users />} />
+          <Route path="/usuarios/registro" element={<UsersRegister />} />
           <Route path="/clients" element={<Clients view={clientsViews[0]} />} />
           <Route path="/clients/register" element={<Clients view={clientsViews[1]} />} />
           <Route path="/clients/edit/:id" element={<Clients view={clientsViews[2]} />} />
