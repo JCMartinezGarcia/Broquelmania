@@ -54,10 +54,13 @@ class User extends Authenticatable
     }
 
     /**
-     * 
+     * Gets an user info by id
+     * @param id
+     * @return
      */
     public static function getById($id)
     {
+        //returns user found
         return self::find($id);
     }
 
@@ -74,13 +77,17 @@ class User extends Authenticatable
     }
 
     /**
-     * 
+     * Deletes an user
+     * @param id
+     * @return 
      */
-
-    public static function deleteUser($id)
+    public static function remove($id)
     {
+        //find user by id
         $user = self::find($id);
+        //deletes user
         $user->delete();
+        //returns deleted user
         return $user;
     }
 
