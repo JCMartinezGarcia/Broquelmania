@@ -4,6 +4,7 @@ import Nav from "../../components/navbar/navbar/Nav";
 import SideBar from "../../components/sidebar/SideBar";
 import BreadCum from "../../components/breadcum/BreadCum";
 import {
+    Image,
     User,
     Tooltip,
     Card, CardBody,
@@ -84,7 +85,7 @@ const Users = () => {
      */
     async function getUser(id: number) {
         try {
-            const { data, status } = await axios.get(`user/${id}`);
+            const { data, status } = await axios.get(`users/${id}`);
             if (status === 200) {
                 return data;
             }
@@ -108,7 +109,7 @@ const Users = () => {
         }
     }
     /**
-     * Deletes an user by id
+     * Deletes an user
      * @param id 
      */
     async function deleteUser(id: number) {
@@ -174,6 +175,7 @@ const Users = () => {
     function handleEdit(id: number) {
         navigate(`/usuarios/editar/${id}`);
     }
+
     /**
      * Shows confirmation modal to delete user
      * @param id 
@@ -237,6 +239,7 @@ const Users = () => {
 
                             </span>
                         </Tooltip>
+                        {/**
                         <Tooltip content="Editar">
                             <span className="text-lg text-primary-400 cursor-pointer active:opacity-50"
                                 onClick={() => { handleEdit(user.id) }}
@@ -244,6 +247,8 @@ const Users = () => {
                                 <FaUserEdit />
                             </span>
                         </Tooltip>
+                         * 
+                         */}
                         <Tooltip color="danger" content="Eliminar">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50"
                                 onClick={() => { handleDelete(user.id) }}
@@ -279,7 +284,6 @@ const Users = () => {
                                     <label><strong>Fecha de registro:</strong></label>
                                     <p>{user?.created_at}</p>
                                 </div>
-
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>

@@ -50,7 +50,9 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
+        //call model method 
         $user = User::getById($id);
+        //returns the result
         return response()->json($user);
     }
 
@@ -65,10 +67,14 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @param id
+     * @return 
      */
     public function destroy(string $id)
     {
-        $user = User::deleteUser($id);
+        //calls model function 
+        $user = User::remove($id);
+        //returns deleted user
         return response()->json($user);
     }
 
