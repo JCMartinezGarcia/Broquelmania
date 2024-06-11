@@ -14,33 +14,39 @@ interface FData {
 }
 
 const FormRegister = () => {
-    const { register, handleSubmit, formState: { errors }, control } = useForm<FData>();
+
+    const { register, handleSubmit, formState: { errors }, control, getValues, setValue } = useForm<FData>();
     const navigate = useNavigate();
-    /**
-     * is called on form submit and passes the form inputs data to createClient
-     */
+
+    // hadles submit form
     const onSubmit = handleSubmit((data) => {
-        registerSupplier(data);
+        setValue('password', '12345678');
+        //calling register user method
+        registerUser(data);
     });
 
     // axios functions
+
     /**
-     * sends the inputs values of the form to the server to create a new client
+     * Sends data to server to register new users
+     * @param data 
      */
-    async function registerSupplier(data: FData) {
+    async function registerUser(data: FData) {
+        const userInfo = getValues();
         try {
-            //post to server
-            const res = await axios.post('/suppliers', data);
+            const res = await axios.post('/users', userInfo);
             //validate if reponse is successfull
             if (res.status === 200) {
+                console.log(res);
+                return;
                 //show success message
                 swal({
-                    title: "¡Proveedor registrado!",
-                    text: "Se registró el proveedor con éxito.",
+                    title: "¡Usuario registrado!",
+                    text: "Se registró el usuario con éxito.",
                     icon: "success"
                 }).then((action) => {
-                    //redirects to clients list table
-                    (action) ? navigate('/proveedores/listado') : navigate('/proveedores/listado');
+                    //redirects to users list table
+                    (action) ? navigate('/usuarios') : navigate('/usuarios');
                 });
 
             }
@@ -58,7 +64,7 @@ const FormRegister = () => {
                 <CardBody>
                     <form onSubmit={onSubmit}>
                         <Input
-                            {...register("nombres",
+                            {...register("name",
                                 {
                                     required: "* Este campo es requerido.",
                                     maxLength:
@@ -70,78 +76,32 @@ const FormRegister = () => {
                             className={styles.formInputs}
                             size="sm"
                             type="text"
-                            label="Nombres"
+                            label="Nombre"
                             placeholder="Ingresa nombre(s).."
                         />
-                        {errors.nombres && <p className={styles.formError}>{errors.nombres.message}</p>}
+                        {errors.name && <p className={styles.formError}>{errors.name.message}</p>}
                         <Input
-                            {...register("apellidos",
+                            {...register("email",
                                 {
                                     required: "* Este campo es requerido.",
                                     maxLength:
                                     {
-                                        value: 15,
-                                        message: "Maximo 15 characteres."
+                                        value: 30,
+                                        message: "Maximo 30 characteres."
                                     }
                                 })}
-                            className={styles.formInputs}
-                            size="sm" type="text"
-                            label="Apellidos"
-                            placeholder="Ingresa apellido(s).."
-                        />
-                        {errors.apellidos && <p className={styles.formError}>{errors.apellidos.message}</p>}
-                        <Input
-                            {...register("compañia",
-                                {
-                                    required: "* Este campo es requerido.",
-                                    maxLength:
-                                    {
-                                        value: 15,
-                                        message: "Maximo 15 characteres."
-                                    }
-                                })}
-                            className={styles.formInputs}
-                            size="sm" type="text"
-                            label="Compañia"
-                            placeholder="Ingresa compañia.."
-                        />
-                        {errors.compañia && <p className={styles.formError}>{errors.compañia.message}</p>}
-                        <Input
-                            {...register("email", { required: "* Este campo es requerido." })}
                             className={styles.formInputs}
                             size="sm"
-                            type="email"
+                            type="text"
                             label="Email"
                             placeholder="Ingresa email.."
                         />
                         {errors.email && <p className={styles.formError}>{errors.email.message}</p>}
-                        <Textarea
-                            {...register("direccion", { required: "* Este campo es requerido." })}
-                            className={styles.formInputs}
-                            label="Dirección"
-                            placeholder="Ingresa dirección..."
-                        />
-                        {errors.direccion && <p className={styles.formError}>{errors.direccion.message}</p>}
-                        <Input
-                            {...register("telefono_contacto", {
-                                required: "* Este campo es requerido.",
-                                maxLength: {
-                                    value: 10,
-                                    message: "Maximo 10 digitos."
-                                }
-                            })}
-                            className={styles.formInputs}
-                            size="sm"
-                            type="text"
-                            label="Telefono Móvil"
-                            placeholder="Ingresa telefono.."
-                        />
-                        {errors.telefono_contacto && <p className={styles.formError}>{errors.telefono_contacto.message}</p>}
-
 
                         <Input
                             className="mt-4"
                             type="submit"
+                            role="button"
                             color="secondary"
                             value="Registrar"
                         />

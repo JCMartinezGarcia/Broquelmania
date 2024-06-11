@@ -16,7 +16,7 @@ const UsersRegister = () => {
                 {/**sidebar */}
                 <SideBar isHomeView={isHome} />
                 {/**clients section */}
-                <div className={styles.clientsContainer}>
+                <div className={styles.usersContainer}>
                     <FormRegister />
                 </div>
             </div>

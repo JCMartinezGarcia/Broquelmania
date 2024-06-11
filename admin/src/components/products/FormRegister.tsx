@@ -108,7 +108,6 @@ const FormRegister: React.FC<FormRegisterProps> = (
      * sends the form values to the server to register a new product
      */
     async function registerProduct(data: FData) {
-        console.log(data); return
         try {
             //post to server
             const res = await axios.post('/products', data, {

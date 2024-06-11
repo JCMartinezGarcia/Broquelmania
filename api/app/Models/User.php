@@ -8,8 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -63,7 +66,23 @@ class User extends Authenticatable
         //returns user found
         return self::find($id);
     }
+    /**
+     * Registers new user 
+     * @param user
+     * @return 
+     */
+    public static function register($user)
+    {
+        $newUser = self::create([
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'password' => Hash::make($user['password']),
+        ]);
 
+        event(new Registered($newUser));
+
+        // Auth::login($user);
+    }
     /**
      * 
      */
@@ -86,7 +105,7 @@ class User extends Authenticatable
         //find user by id
         $user = self::find($id);
         //deletes user
-        $user->delete();
+        $user->forceDelete();
         //returns deleted user
         return $user;
     }

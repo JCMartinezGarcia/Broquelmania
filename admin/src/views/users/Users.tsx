@@ -321,7 +321,7 @@ const Users = () => {
                         <Button className={styles.registerButton} size="md" color="secondary" onClick={handleRegister}>Agregar</Button>
                     </div>
                     {/** list table */}
-                    <Card className={styles.suppliersTableContainer}>
+                    <Card className={styles.usersTableContainer}>
                         <CardBody>
                             <div >
                                 <Table aria-label="Example table with custom cells"
